@@ -1,5 +1,6 @@
 package com.jack.web.controller;
 
+import com.jack.util.TmResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,9 @@ public class TestController {
 
     @RequestMapping("/index")
     @ResponseBody
-    public Map index() {
-        Map<String, String> result = new HashMap<>();
-        result.put("username", "张家乐");
-        result.put("welcome", "您好！欢迎使用本系统。");
-        return result;
+    public TmResponse<String[]> index() {
+        TmResponse tmResponse = TmResponse.success("请求成功", new String[]{"book", "bycle"});
+        return tmResponse;
     }
 
 

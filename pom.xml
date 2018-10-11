@@ -162,6 +162,18 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.38</version>
     </dependency>
+    <!--Lombok-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.16.18</version>
+    </dependency>
+    <!--Guava 第三方工具类依赖-->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>21.0</version>
+    </dependency>
     <!--日志Log4J-->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -176,7 +188,7 @@
   </dependencies>
 
   <build>
-    <finalName>SpringMVC04</finalName>
+    <finalName>ToolsManage</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>

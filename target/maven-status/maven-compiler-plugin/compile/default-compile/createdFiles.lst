@@ -1,4 +1,7 @@
-com\jack\config\WebAppInitializer.class
 com\jack\config\RootConfig.class
+com\jack\util\TmResponse$StatusCode.class
+com\jack\util\TmResponse.class
+com\jack\config\WebAppInitializer.class
 com\jack\config\WebConfig.class
+com\jack\util\TmResponse$TmStatus.class
 com\jack\web\controller\TestController.class
