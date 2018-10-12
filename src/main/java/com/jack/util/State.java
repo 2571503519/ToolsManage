@@ -13,4 +13,12 @@ public class State {
         }
     }
 
+    public enum CommonState {
+        NORMAL(2), FORBID(1), DELETE(0);
+        private Integer stateCode;
+        CommonState(Integer stateCode) {
+            this.stateCode = stateCode;
+        }
+    }
+
 }
