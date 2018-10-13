@@ -3,11 +3,25 @@
 <!-- Mapper类的命名空间 -->
 <mapper namespace="com.jack.dao.ResourceMapper">
 
+    <resultMap id="BaseResultMap" type="com.jack.pojo.entity.Resource">
+        <id property="resId" column="res_id"/>
+        <result property="resName" column="res_name"/>
+        <result property="resUrl" column="res_url"/>
+        <result property="resPid" column="res_pid"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
 
 
     <sql id="AllColumn">
         res_id, res_name, res_url, res_pid, gmt_create, gmt_modified
     </sql>
+
+    <select id="findResourceByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_resource
+        where res_id = #{resId}
+    </select>
 
     <insert id="saveResource" parameterType="resource" useGeneratedKeys="true" keyProperty="resId">
         <selectKey order="AFTER" keyProperty="resId" resultType="long">
@@ -16,5 +30,29 @@
         insert into tm_resource (res_id, res_name, res_url, res_pid, gmt_create, gmt_modified)
                           value (null, #{resName}, #{resUrl}, #{resPid}, now(), now());
     </insert>
+
+    <update id="updateResource" parameterType="resource">
+        update tm_resource
+        <set>
+            <if test="resName != null">
+                res_name = #{resName},
+            </if>
+            <if test="resUrl != null">
+                res_url = #{resUrl},
+            </if>
+            <if test="resPid != null">
+                res_pid = #{resPid},
+            </if>
+            <if test="true">
+                gmt_modified = now(),
+            </if>
+        </set>
+        where res_id = #{resId}
+    </update>
+
+    <delete id="deleteResource" parameterType="long">
+        delete from tm_resource
+        where res_id = #{resId}
+    </delete>
 
 </mapper>

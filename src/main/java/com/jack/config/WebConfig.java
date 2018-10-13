@@ -19,7 +19,6 @@ import java.io.IOException;
  * @date 2018/6/18 10:32
  */
 @Configuration
-//@EnableWebMvc
 @ComponentScan(basePackages = "com.jack.web")
 @ImportResource({"classpath:spring-web.xml"})
 public class WebConfig extends WebMvcConfigurerAdapter {

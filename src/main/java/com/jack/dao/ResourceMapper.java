@@ -11,4 +11,10 @@ public interface ResourceMapper {
 
     boolean saveResource(Resource resource);
 
+    boolean updateResource(Resource resource);
+
+    Resource findResourceByPrimaryKey(Long resId);
+
+    boolean deleteResource(Long resId);
+
 }
