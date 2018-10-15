@@ -4,12 +4,14 @@ import com.jack.util.State;
 import com.jack.util.Type;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/13.
  */
+@ToString
 public class Tool {
 
     @Getter @Setter private Long toolId;
@@ -24,7 +26,7 @@ public class Tool {
 
     @Getter @Setter private Type.ToolType type;
 
-    @Getter @Setter private State.CommonState state;
+    @Getter @Setter private State.ToolState state;
 
     @Getter @Setter private String rfidCode;
 

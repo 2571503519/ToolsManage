@@ -6,22 +6,22 @@
         <id column="tb_id" property="tbId" javaType="java.lang.Long" jdbcType="INTEGER"/>
         <result column="rfid_code" property="rfidCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="rfid_reader_code" property="rfidReaderCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="type" property="type" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+        <result column="type" property="type"/>
         <result column="rep_id" property="repId" javaType="java.lang.Long" jdbcType="INTEGER"/>
-        <result column="state" property="state" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+        <result column="state" property="state" typeHandler="com.jack.typehandler.ToolStateTypeHandler"/>
         <result column="gmt_create" property="gmtCreate" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
         <result column="gmt_modified" property="gmtModified" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="AllColumn">
-        tb_id, rfid_code, rfid_reader_code, type,rep_id, state, gmt_create, gmt_modified
+        tb_id, rfid_code, rfid_reader_code, `type`, rep_id, state, gmt_create, gmt_modified
     </sql>
 
     <insert id="saveToolBag" parameterType="toolBag" useGeneratedKeys="true" keyProperty="tbId">
         <selectKey order="AFTER" keyProperty="tbId" resultType="long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into  tm_tool_bag(tb_id,rfid_code,rfid_reader_code,type,rep_id,state,gmt_create,gmt_modified)
-        values (null, #{rfidCode}, #{rfidReaderCode}, #{type}, #{repId}, #{state}, now(), now());
+        insert into  tm_tool_bag(tb_id,rfid_code,rfid_reader_code,`type`,rep_id,state,gmt_create,gmt_modified)
+        values (null, #{rfidCode}, #{rfidReaderCode}, #{type}, #{repId}, #{state, typeHandler=com.jack.typehandler.ToolStateTypeHandler}, now(), now());
     </insert>
 
     <update id="updateToolBag" parameterType="toolBag">
@@ -34,13 +34,13 @@
                 rfid_reader_code = #{rfidReaderCode},
             </if>
             <if test="type != null">
-                type = #{type},
+                `type` = #{type},
             </if>
             <if test="repId != null">
-                type = #{type},
+                `type` = #{type},
             </if>
             <if test="state != null">
-                state = #{state},
+                state = #{state, typeHandler=com.jack.typehandler.ToolStateTypeHandler},
             </if>
             <if test="gmtCreate != null">
                 gmt_create = now()

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jack.dao.ToolMapper">
+
+    <resultMap id="BaseResultMap" type="com.jack.pojo.entity.Tool">
+        <id property="toolId" column="tool_id"/>
+        <result property="toolName" column="tool_name"/>
+        <result property="cateId" column="cate_id"/>
+        <result property="repId" column="rep_id"/>
+        <result property="imgUrl" column="img_url"/>
+        <result property="type" column="type"/>
+        <result property="state" column="state" typeHandler="com.jack.typehandler.ToolStateTypeHandler"/>
+        <result property="rfidCode" column="rfid_code"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+    <sql id="AllColumn">
+        tool_id, tool_name, cate_id, rep_id, img_url, `type`, state, rfid_code, gmt_create, gmt_modified
+    </sql>
+
+    <select id="findToolByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_tool
+        where tool_id = #{toolId}
+    </select>
+
+    <insert id="saveTool" parameterType="tool" useGeneratedKeys="true" keyProperty="toolId">
+        <selectKey order="AFTER" keyProperty="toolId" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_tool (tool_id, tool_name, cate_id, rep_id, img_url, `type`, state, rfid_code, gmt_create, gmt_modified)
+        values (NULL, #{toolName}, #{cateId}, #{repId}, #{imgUrl}, #{type}, #{state, typeHandler=com.jack.typehandler.ToolStateTypeHandler}
+        , #{rfidCode}, now(), now());
+    </insert>
+
+    <update id="updateTool" parameterType="tool">
+        update tm_tool
+        <set>
+            <if test="toolName !=null">
+                tool_name = #{toolName},
+            </if>
+            <if test="cateId != null">
+                cate_id = #{cateId},
+            </if>
+            <if test="repId != null">
+                rep_id = #{repId},
+            </if>
+            <if test="imgUrl != null">
+                img_url = #{imgUrl},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="state != null">
+                state = #{state, typeHandler=com.jack.typehandler.ToolStateTypeHandler},
+            </if>
+            <if test="rfidCode != null">
+                rfid_code = #{rfidCode},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = now()
+            </if>
+        </set>
+        where tool_id = #{toolId}
+    </update>
+
+    <delete id="deleteTool" parameterType="long">
+        delete from tm_tool
+        where tool_id = #{toolId}
+    </delete>
+
+</mapper>
