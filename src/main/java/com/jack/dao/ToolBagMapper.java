@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ToolBagMapper {
+
     boolean saveToolBag(ToolBag toolBag);
 
     boolean updateToolBag(ToolBag toolBag);

@@ -1,5 +1,6 @@
 package com.jack.pojo.entity;
 
+import com.jack.util.Type;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +16,7 @@ public class ToolBag {
 
     @Getter @Setter private String rfidReaderCode; //RFID读取器机器码
 
-    @Getter @Setter private Integer type; //工具包类型 小 1、中 2、大 3
+    @Getter @Setter private Type.ToolType type; //工具包类型 小 1、中 2、大 3
 
     @Getter @Setter private Long repId; //所属库房Id
 

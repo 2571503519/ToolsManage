@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Mapper类的命名空间 -->
+<mapper namespace="com.jack.dao.RepertoryMapper">
+    <resultMap id="BaseResultMap" type="repertory">
+        <id column="rep_id" property="repId" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="rep_manager" property="repManager" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="dept_id" property="deptId" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="rep_location" property="repLocation" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="state" property="state" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="AllColumn" >
+      rep_id, rep_manager, phone, dept_id, rep_location, state
+    </sql>
+
+    <insert id="saveRepertory" parameterType="repertory" useGeneratedKeys="true" keyProperty="repId">
+        <selectKey order="AFTER" keyProperty="repId" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_repertory(rep_id, rep_manager, phone, dept_id, rep_location, state)
+        values (null, #{repManager}, #{phone}, #{deptId}, #{repLocation}, #{state})
+    </insert>
+
+    <update id="updateRepertory" parameterType="repertory">
+        update tm_repertory
+        <set>
+            <if test="repManager != null">
+                rep_manager = #{repManager},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="repLocation != null">
+                rep_location = #{repLocation},
+            </if>
+            <if test="state != null">
+                state = #{state}
+            </if>
+        </set>
+        where rep_id = #{repId}
+    </update>
+
+    <delete id="deleteRepertory" parameterType="long">
+        delete from tm_repertory
+        where rep_id = #{repId}
+    </delete>
+
+    <select id="findRepertoryByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_repertory
+        where rep_id = #{repId}
+    </select>
+</mapper>
