@@ -31,4 +31,13 @@ public class State {
         }
     }
 
+    public enum ToolState {
+        USING(3), READY(2), REPAIR(1), RUIN(0);
+        @Getter private Integer stateCode;
+
+        ToolState(Integer stateCode) {
+            this.stateCode = stateCode;
+        }
+    }
+
 }
