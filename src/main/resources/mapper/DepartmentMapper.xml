@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Mapper类的命名空间 -->
+<mapper namespace="com.jack.dao.DepartmentMapper">
+    <resultMap id="BaseResultMap" type="department">
+        <id column="dept_id" property="deptId" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="dept_name" property="deptName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="dept_pid" property="deptPid" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="dept_manager" property="deptManager" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="dept_manager_phone" property="deptManagerPhone" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="AllColumn">
+        dept_id, dept_name, dept_pid, dept_manager, dept_manager_phone
+    </sql>
+
+    <insert id="saveDepartment" parameterType="department" useGeneratedKeys="true" keyProperty="deptId">
+        <selectKey order="AFTER" keyProperty="deptId" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_dept(dept_id, dept_name, dept_pid, dept_manager, dept_manager_phone)
+        values (null, #{deptName}, #{deptPid}, #{deptManager}, #{deptManagerPhone})
+    </insert>
+
+    <update id="updateDepartment" parameterType="department">
+        update tm_dept
+        <set>
+            <if test="deptName != null">
+                dept_name = #{deptName},
+            </if>
+            <if test="deptPid != null">
+                dept_pid = #{deptPid},
+            </if>
+            <if test="deptManager != null">
+                dept_manager = #{deptManager},
+            </if>
+            <if test="deptManagerPhone != null">
+                dept_manager_phone = #{deptManagerPhone}
+            </if>
+        </set>
+        where dept_id = #{deptId}
+    </update>
+
+    <delete id="deleteDepartment" parameterType="long">
+        delete from tm_dept
+        where dept_id = #{deptId}
+    </delete>
+
+    <select id="findDepartmentByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_dept
+        where dept_id = #{deptId}
+    </select>
+</mapper>

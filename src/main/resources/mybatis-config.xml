@@ -16,6 +16,11 @@
         <mapper resource="mapper/ResourceMapper.xml"/>
         <mapper resource="mapper/AdminMapper.xml"/>
         <mapper resource="mapper/ToolBagMapper.xml"/>
+<<<<<<< HEAD
         <mapper resource="mapper/ToolMapper.xml"/>
+=======
+        <mapper resource="mapper/RepertoryMapper.xml"/>
+        <mapper resource="mapper/DepartmentMapper.xml"/>
+>>>>>>> f7e2d94cef630a1e63c0880d35e70215307cb7a9
     </mappers>
 </configuration>
