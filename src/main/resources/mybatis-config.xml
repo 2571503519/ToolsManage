@@ -15,5 +15,6 @@
     <mappers>
         <mapper resource="mapper/ResourceMapper.xml"/>
         <mapper resource="mapper/AdminMapper.xml"/>
+        <mapper resource="mapper/ToolBagMapper.xml"/>
     </mappers>
 </configuration>

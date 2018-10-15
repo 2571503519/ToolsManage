@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Mapper类的命名空间 -->
+<mapper namespace="com.jack.dao.ToolBagMapper">
+    <resultMap id="ToolBagMap" type="toolBag">
+        <id column="tb_id" property="tbId" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="rfid_code" property="rfidCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="rfid_reader_code" property="rfidReaderCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="type" property="type" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+        <result column="rep_id" property="repId" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="state" property="state" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+        <result column="gmt_create" property="gmtCreate" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" javaType="java.sql.Timestamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="AllColumn">
+        tb_id, rfid_code, rfid_reader_code, type,rep_id, state, gmt_create, gmt_modified
+    </sql>
+
+    <insert id="saveToolBag" parameterType="toolBag" useGeneratedKeys="true" keyProperty="tbId">
+        <selectKey order="AFTER" keyProperty="tbId" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into  tm_tool_bag(tb_id,rfid_code,rfid_reader_code,type,rep_id,state,gmt_create,gmt_modified)
+        values (null, #{rfidCode}, #{rfidReaderCode}, #{type}, #{repId}, #{state}, now(), now());
+    </insert>
+
+    <update id="updateToolBag" parameterType="toolBag">
+        update tm_tool_bag
+        <set>
+            <if test="rfidCode !=null">
+                rfid_code = #{rfidCode},
+            </if>
+            <if test="rfidReaderCode != null">
+                rfid_reader_code = #{rfidReaderCode},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="repId != null">
+                type = #{type},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = now()
+            </if>
+        </set>
+        where tb_id = #{tbId}
+    </update>
+
+    <delete id="deleteToolBag" parameterType="long">
+        delete from tm_tool_bag
+        where tb_id = #{tbId}
+    </delete>
+
+    <select id="findToolBagByPrimaryKey" parameterType="long" resultMap="ToolBagMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_tool_bag
+        where tb_id = #{tbId}
+    </select>
+</mapper>
