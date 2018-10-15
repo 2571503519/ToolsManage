@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jack.dao.AdminMapper">
+
+    <resultMap id="BaseResultMap" type="com.jack.pojo.entity.Admin">
+        <id property="adminId" column="admin_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="idCard" column="id_card"/>
+        <result property="adminName" column="admin_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="resIds" column="res_ids" typeHandler="com.jack.typehandler.StringListTypeHandler"/>
+        <result property="state" column="state" typeHandler="com.jack.typehandler.StateTypeHandler"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+    <sql id="AllColumn">
+      admin_id, username, password, id_card, admin_name, dept_id, res_ids, state, gmt_create, gmt_modified
+    </sql>
+
+    <insert id="saveAdmin" parameterType="admin" useGeneratedKeys="true" keyProperty="adminId">
+        <selectKey order="AFTER" keyProperty="adminId" resultType="long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tm_admin (admin_id, username, password, id_card, admin_name, dept_id, res_ids, state, gmt_create, gmt_modified)
+        value (NULL, #{username}, #{password}, #{idCard}, #{adminName}, #{deptId}
+        , #{resIds, typeHandler=com.jack.typehandler.StringListTypeHandler}, #{state, typeHandler=com.jack.typehandler.StateTypeHandler}, now(), now());
+    </insert>
+
+    <select id="findAdminByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_admin
+        where admin_id = #{adminId}
+    </select>
+
+    <!--注意：username是MySQL中的关键字，所以需要加上``-->
+    <update id="updateAdmin" parameterType="admin">
+        update tm_admin
+        <set>
+            <if test="username != null">
+                `username` = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{adminName},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="resIds != null">
+                res_ids = #{resIds, typeHandler=com.jack.typehandler.StringListTypeHandler},
+            </if>
+            <if test="state != null">
+                state = #{state, typeHandler=com.jack.typehandler.StateTypeHandler},
+            </if>
+            <if test="true">
+                gmt_modified = now(),
+            </if>
+        </set>
+        where admin_id = #{adminId}
+    </update>
+
+    <delete id="deleteAdmin" parameterType="long">
+        delete from tm_admin
+        where admin_id = #{adminId}
+    </delete>
+
+</mapper>
