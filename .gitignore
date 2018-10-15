@@ -1,4 +1,8 @@
 .idea/
 target/
 ToolsManage.iml
+<<<<<<< HEAD
 Tools-Manage.iml
+=======
+Tools-Manage.iml
+>>>>>>> 02f888b5563b7a1f6883ef3cca6b7886a1257c1b
