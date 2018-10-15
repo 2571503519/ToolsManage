@@ -17,6 +17,7 @@
         <mapper resource="mapper/AdminMapper.xml"/>
         <mapper resource="mapper/ToolBagMapper.xml"/>
         <mapper resource="mapper/ToolMapper.xml"/>
+        <mapper resource="mapper/ToolCateMapper.xml"/>
         <mapper resource="mapper/RepertoryMapper.xml"/>
         <mapper resource="mapper/DepartmentMapper.xml"/>
     </mappers>

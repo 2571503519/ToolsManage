@@ -8,6 +8,9 @@ import lombok.Getter;
  */
 public class State {
 
+    /**
+     * 管理员的状态枚举类
+     */
     public enum AdminState {
         NORMAL(2), FORBID(1), DELETE(0);
         @Getter private Integer stateCode;
@@ -23,14 +26,27 @@ public class State {
         }
     }
 
+    /**
+     * 通用的状态枚举类
+     */
     public enum CommonState {
         NORMAL(2), FORBID(1), DELETE(0);
-        private Integer stateCode;
+        @Getter private Integer stateCode;
         CommonState(Integer stateCode) {
             this.stateCode = stateCode;
         }
+
+        public static CommonState codeOf(Integer stateCode) {
+            if (stateCode == 2) return NORMAL;
+            if (stateCode == 1) return FORBID;
+            if (stateCode == 0) return DELETE;
+            else throw new NotFoundCodeException();
+        }
     }
 
+    /**
+     * 工具和工具包的状态枚举类
+     */
     public enum ToolState {
         USING(3), READY(2), REPAIR(1), RUIN(0);
         @Getter private Integer stateCode;

@@ -1,6 +1,7 @@
 package com.jack.dao;
 
 import com.jack.pojo.entity.Repertory;
+import com.jack.util.State;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class RepertoryMapperTest {
         repertory.setPhone("123456789");
         repertory.setDeptId(1L);
         repertory.setRepLocation("nanchang");
-        repertory.setState(2);
+        repertory.setState(State.CommonState.NORMAL);
         boolean res = repertoryMapper.saveRepertory(repertory);
         logger.info("Test : Save a Repertory，Result {},repId {}",res,repertory.getRepId());
     }
@@ -48,7 +49,7 @@ public class RepertoryMapperTest {
     }
     @Test
     public void testDeleteRepertory(){
-        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(3L);
+        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(2L);
         if(repertory == null){
             logger.info("Test : Query Result is null");
             return;

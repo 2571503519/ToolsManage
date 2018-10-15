@@ -8,7 +8,7 @@
         <result column="phone" property="phone" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="dept_id" property="deptId" javaType="java.lang.Long" jdbcType="INTEGER"/>
         <result column="rep_location" property="repLocation" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="state" property="state" javaType="java.lang.Integer" jdbcType="TINYINT"/>
+        <result column="state" property="state" typeHandler="com.jack.typehandler.CommonStateTypeHandler"/>
     </resultMap>
 
     <sql id="AllColumn" >
@@ -20,7 +20,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into tm_repertory(rep_id, rep_manager, phone, dept_id, rep_location, state)
-        values (null, #{repManager}, #{phone}, #{deptId}, #{repLocation}, #{state})
+        values (null, #{repManager}, #{phone}, #{deptId}, #{repLocation}, #{state, typeHandler=com.jack.typehandler.CommonStateTypeHandler})
     </insert>
 
     <update id="updateRepertory" parameterType="repertory">
@@ -39,7 +39,7 @@
                 rep_location = #{repLocation},
             </if>
             <if test="state != null">
-                state = #{state}
+                state = #{state, typeHandler=com.jack.typehandler.CommonStateTypeHandler}
             </if>
         </set>
         where rep_id = #{repId}

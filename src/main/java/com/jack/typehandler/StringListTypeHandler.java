@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/13.
+ * 完成String与List之间的相互转换，例如 "1,2,3,4" <=> List: [1, 2, 3, 4]
  */
 public class StringListTypeHandler implements TypeHandler<List<Long>> {
     // 默认分隔符

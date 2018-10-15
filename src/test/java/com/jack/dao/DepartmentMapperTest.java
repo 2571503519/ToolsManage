@@ -49,7 +49,7 @@ public class DepartmentMapperTest {
     }
     @Test
     public void testDeleteDepartment(){
-        Department department = departmentMapper.findDepartmentByPrimaryKey(3L);
+        Department department = departmentMapper.findDepartmentByPrimaryKey(1L);
         if(department == null){
             logger.info("Test : Query Result is null ");
             return;

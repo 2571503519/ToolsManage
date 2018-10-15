@@ -19,8 +19,6 @@ public class ToolBag {
 
     @Getter @Setter private Type.ToolType type; //工具包型号，大 BIG、中 MEDIUM、小 SMALL
 
-    //TODO: 这里的type属性使用com.jack.util.Type.ToolType枚举类，对应jdbcType为VARCHAR
-
     @Getter @Setter private Long repId; //所属库房Id
 
     // 关于只包含几种值的类型，建议使用枚举，这样语义更加明确

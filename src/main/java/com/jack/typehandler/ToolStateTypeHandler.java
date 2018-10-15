@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/15.
+ * 工具和工具包的状态枚举与状态码值的相互转换
  */
 public class ToolStateTypeHandler implements TypeHandler<State.ToolState> {
     @Override

@@ -1,5 +1,6 @@
 package com.jack.pojo.entity;
 
+import com.jack.util.State;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,5 +18,5 @@ public class Repertory {
 
     @Getter @Setter private String repLocation;  //库房地址
 
-    @Getter @Setter private Integer state;
+    @Getter @Setter private State.CommonState state;
 }

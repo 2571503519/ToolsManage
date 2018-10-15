@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/13.
+ * 管理员的状态枚举与状态码值的相互转换
  */
 public class StateTypeHandler implements TypeHandler<State.AdminState> {
     @Override
