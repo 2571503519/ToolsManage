@@ -1,4 +1,4 @@
-package com.jack.dao;
+package com.jack.dao.tool;
 
 import com.jack.pojo.entity.ToolBag;
 import org.springframework.stereotype.Repository;

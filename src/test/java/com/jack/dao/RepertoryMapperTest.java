@@ -1,5 +1,6 @@
 package com.jack.dao;
 
+import com.jack.dao.repertory.RepertoryMapper;
 import com.jack.pojo.entity.Repertory;
 import com.jack.util.State;
 import org.junit.Test;

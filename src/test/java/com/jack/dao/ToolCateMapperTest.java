@@ -1,8 +1,7 @@
 package com.jack.dao;
 
+import com.jack.dao.tool.ToolCateMapper;
 import com.jack.pojo.entity.ToolCate;
-import org.apache.ibatis.session.ResultContext;
-import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -10,11 +9,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.validation.constraints.Max;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

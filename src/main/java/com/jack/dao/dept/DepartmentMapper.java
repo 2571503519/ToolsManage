@@ -1,4 +1,4 @@
-package com.jack.dao;
+package com.jack.dao.dept;
 
 
 import com.jack.pojo.entity.Department;

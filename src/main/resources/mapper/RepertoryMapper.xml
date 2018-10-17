@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- Mapper类的命名空间 -->
-<mapper namespace="com.jack.dao.RepertoryMapper">
+<mapper namespace="com.jack.dao.repertory.RepertoryMapper">
     <resultMap id="BaseResultMap" type="repertory">
         <id column="rep_id" property="repId" javaType="java.lang.Long" jdbcType="INTEGER"/>
         <result column="rep_manager" property="repManager" javaType="java.lang.String" jdbcType="VARCHAR"/>
