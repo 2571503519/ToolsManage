@@ -1,7 +1,6 @@
 package com.jack.dao;
 
 import com.google.common.collect.Lists;
-import com.jack.dao.admin.AdminMapper;
 import com.jack.pojo.entity.Admin;
 import com.jack.util.State;
 import org.junit.Test;

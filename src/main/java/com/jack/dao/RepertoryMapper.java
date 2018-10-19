@@ -1,4 +1,4 @@
-package com.jack.dao.repertory;
+package com.jack.dao;
 
 import com.jack.pojo.entity.Repertory;
 import org.springframework.stereotype.Repository;

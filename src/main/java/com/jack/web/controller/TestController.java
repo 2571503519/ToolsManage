@@ -1,4 +1,4 @@
-package com.jack.web.admin.controller;
+package com.jack.web.controller;
 
 import com.jack.util.TmResponse;
 import org.slf4j.Logger;

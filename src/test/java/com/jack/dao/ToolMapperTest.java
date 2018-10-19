@@ -1,6 +1,5 @@
 package com.jack.dao;
 
-import com.jack.dao.tool.ToolMapper;
 import com.jack.pojo.entity.Tool;
 import com.jack.util.State;
 import com.jack.util.Type;

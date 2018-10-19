@@ -1,4 +1,4 @@
-package com.jack.web.admin.controller;
+package com.jack.web.controller;
 
 import com.jack.pojo.entity.Admin;
 import com.jack.util.TmResponse;

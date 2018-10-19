@@ -1,7 +1,6 @@
 package com.jack.dao;
 
 
-import com.jack.dao.dept.DepartmentMapper;
 import com.jack.pojo.entity.Department;
 import org.junit.Test;
 import org.junit.runner.RunWith;

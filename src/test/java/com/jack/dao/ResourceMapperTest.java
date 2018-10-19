@@ -1,6 +1,5 @@
 package com.jack.dao;
 
-import com.jack.dao.admin.ResourceMapper;
 import com.jack.pojo.entity.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;

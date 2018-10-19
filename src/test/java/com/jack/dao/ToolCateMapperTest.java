@@ -1,6 +1,5 @@
 package com.jack.dao;
 
-import com.jack.dao.tool.ToolCateMapper;
 import com.jack.pojo.entity.ToolCate;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
