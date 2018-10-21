@@ -2,6 +2,8 @@ package com.jack.dao;
 
 import com.google.common.collect.Lists;
 import com.jack.pojo.entity.Admin;
+import com.jack.pojo.entity.Resource;
+import com.jack.pojo.entity.Role;
 import com.jack.util.State;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/13.
@@ -58,6 +62,28 @@ public class AdminMapperTest {
     public void testDeleteAdmin() {
         boolean res = mapper.deleteAdmin(1L);
         logger.info("Test: Delete a admin, Result: {}", res);
+    }
+
+    @Test
+    public void testFindRolesByUsername() {
+        List<Role> roles = mapper.findRolesByUsername("admin");
+        roles.stream().forEach(role -> {
+            logger.info("Test: query role by admin's username, Result: {}", role.getRoleName());
+        });
+    }
+
+    @Test
+    public void testFindResourcesByUsername() {
+        List<Resource> resources = mapper.findResourcesByUsername("admin");
+
+        for (int i = 0; i < resources.size(); i++) {
+            if (resources.get(i) == null)
+                resources.remove(i);
+        }
+
+        resources.stream().forEach(res -> {
+            logger.info("Test: query resource by admin's username, Result: {}", res.getResName());
+        });
     }
 
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- shiro配置 -->
+    <!-- 自定义Realm -->
+    <bean id="myRealm" class="com.jack.realm.MyRealm" >
+        <!--配置权限缓存-->
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="authorizationCachingEnabled" value="false"/>
+    </bean>
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myRealm" />
+    </bean>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"/>
+        <property name="hashIterations" value="1"/>
+    </bean>
+
+    <!-- Shiro过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- Shiro的核心安全接口,这个属性是必须的 -->
+        <property name="securityManager" ref="securityManager" />
+        <property name="loginUrl" value="/static/html/login.html"/>
+        <property name="unauthorizedUrl" value="/static/html/401.html"/>
+        <!-- Shiro连接约束配置,即过滤链的定义 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 静态文件 -->
+                /static/** = anon
+                /api/v1/admin/login = anon
+                /api/v1/admin/logut = authc
+                /api/v1/admin/** = authc,roles[root]
+            </value>
+        </property>
+    </bean>
+
+</beans>

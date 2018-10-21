@@ -23,7 +23,10 @@ public class StringListTypeHandler implements TypeHandler<List<Long>> {
 
     @Override
     public void setParameter(PreparedStatement ps, int i, List<Long> parameter, JdbcType jdbcType) throws SQLException {
-        ps.setString(i, StringUtils.join(parameter.toArray(), SEPARATOR));
+        if (parameter != null && parameter.size() > 0)
+            ps.setString(i, StringUtils.join(parameter.toArray(), SEPARATOR));
+        else
+            ps.setString(i, null);
     }
 
     @Override
@@ -45,6 +48,7 @@ public class StringListTypeHandler implements TypeHandler<List<Long>> {
     }
 
     private List<Long> stringToList(String str, String separator) {
+        if (StringUtils.isBlank(str)) return Lists.newArrayList();
         if (separator == null) separator = SEPARATOR;
         String[] resIdsArray = StringUtils.split(str, separator);
         List<Long> result = new ArrayList<>(resIdsArray.length);

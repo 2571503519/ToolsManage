@@ -15,6 +15,7 @@
     <mappers>
         <mapper resource="mapper/ResourceMapper.xml"/>
         <mapper resource="mapper/AdminMapper.xml"/>
+        <mapper resource="mapper/RoleMapper.xml"/>
         <mapper resource="mapper/ToolBagMapper.xml"/>
         <mapper resource="mapper/ToolMapper.xml"/>
         <mapper resource="mapper/ToolCateMapper.xml"/>

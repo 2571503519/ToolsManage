@@ -8,6 +8,8 @@
     <mvc:annotation-driven conversion-service="conversionService">
     </mvc:annotation-driven>
 
+    <mvc:resources mapping="/static/**" location="/static/"/>
+
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>

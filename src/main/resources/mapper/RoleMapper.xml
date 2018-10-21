@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Mapper类的命名空间 -->
+<mapper namespace="com.jack.dao.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.jack.pojo.entity.Role">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+    <sql id="AllColumn">
+        role_id, role_name, gmt_create, gmt_modified
+    </sql>
+
+    <select id="findRoleByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_role
+        where role_id = #{roleId}
+    </select>
+
+    <insert id="saveRole" parameterType="role" useGeneratedKeys="true" keyProperty="roleId">
+        <selectKey order="AFTER" keyProperty="roleId" resultType="long">
+            select LAST_INSERT_ID();
+        </selectKey>
+        insert into tm_role (role_id, role_name, gmt_create, gmt_modified)
+        value (NULL, #{roleName}, now(), now());
+    </insert>
+
+    <update id="updateRole" parameterType="role">
+        update tm_role
+        <set>
+            <if test="roleName != null">
+                `role_name` = #{roleName},
+            </if>
+            <if test="true">
+                gmt_modified = now(),
+            </if>
+        </set>
+        where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteRole" parameterType="long">
+        delete from tm_role
+        where role_id = #{roleId}
+    </delete>
+
+</mapper>

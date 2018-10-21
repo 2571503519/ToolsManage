@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @MapperScan(basePackages = "com.jack.dao")
 @PropertySource(value = {"classpath:datasource.properties"})
 /*引入XML配置，可以传入多个文件位置*/
-@ImportResource({"classpath:spring-dao.xml"})
+@ImportResource({"classpath:spring-dao.xml", "classpath:spring-shiro.xml"})
 public class RootConfig {
 
     @Bean

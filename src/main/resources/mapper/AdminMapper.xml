@@ -19,6 +19,39 @@
       admin_id, username, password, id_card, admin_name, dept_id, res_ids, state, gmt_create, gmt_modified
     </sql>
 
+    <select id="findAdminByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_admin
+        where admin_id = #{adminId}
+    </select>
+
+    <select id="findAdminByUsername" parameterType="string" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_admin
+        where username = #{username}
+    </select>
+
+    <select id="findRolesByUsername" parameterType="string" resultType="role">
+        select distinct
+        r.role_id as roleId, r.role_name as roleName, r.gmt_create as gmtCreate, r.gmt_modified as gmtModified
+        from tm_admin a
+        left join tm_admin_role ar on a.admin_id = ar.admin_id
+        left join tm_role r on ar.role_id = r.role_id
+        where a.username = #{username}
+    </select>
+
+    <select id="findResourcesByUsername" parameterType="string" resultType="resource">
+        select distinct
+        res.res_id as resId, res.res_name as resName, res.res_url as resUrl
+        , res.res_pid as resPid, res.gmt_create as gmtCreate, res.gmt_modified as gmtModified
+        from tm_admin a
+        left join tm_admin_role ar on a.admin_id = ar.admin_id
+        left join tm_role r on ar.role_id = r.role_id
+        left join tm_role_resource rr on rr.role_id = r.role_id
+        left join tm_resource res on res.res_id = rr.res_id
+        where a.username = #{username}
+    </select>
+
     <insert id="saveAdmin" parameterType="admin" useGeneratedKeys="true" keyProperty="adminId">
         <selectKey order="AFTER" keyProperty="adminId" resultType="long">
             SELECT LAST_INSERT_ID()
@@ -28,11 +61,6 @@
         , #{resIds, typeHandler=com.jack.typehandler.StringListTypeHandler}, #{state, typeHandler=com.jack.typehandler.StateTypeHandler}, now(), now());
     </insert>
 
-    <select id="findAdminByPrimaryKey" resultMap="BaseResultMap">
-        select <include refid="AllColumn"/>
-        from tm_admin
-        where admin_id = #{adminId}
-    </select>
 
     <!--注意：username是MySQL中的关键字，所以需要加上``-->
     <update id="updateAdmin" parameterType="admin">
