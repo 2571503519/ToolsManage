@@ -3,6 +3,7 @@ package com.jack.dao;
 import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
+import com.jack.util.State;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface AdminMapper {
      List<Role> findRolesByUsername(String username);
 
      List<Resource> findResourcesByUsername(String username);
+
+     List<Admin> findAdminsConditionally(Admin state);
 }

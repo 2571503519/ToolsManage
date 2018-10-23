@@ -12,6 +12,12 @@
         <package name="com.jack.typehandler"/>
     </typeHandlers>
 
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+
     <mappers>
         <mapper resource="mapper/ResourceMapper.xml"/>
         <mapper resource="mapper/AdminMapper.xml"/>

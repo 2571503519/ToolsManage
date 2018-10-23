@@ -16,6 +16,8 @@ public class Resource {
 
     @Getter @Setter private String resName;
 
+    @Getter @Setter private String resPermission;
+
     @Getter @Setter private String resUrl;
 
     @Getter @Setter private Long resPid;

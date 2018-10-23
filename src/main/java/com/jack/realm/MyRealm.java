@@ -85,7 +85,7 @@ public class MyRealm extends AuthorizingRealm {
 		List<Resource> resources = adminService.findResourcesByUsername(username);
 		Set<String> permissions = new HashSet<>();
 		resources.stream().forEach(res -> {
-			permissions.add(res.getResName());
+			permissions.add(res.getResPermission());
 		});
 		return permissions;
 	}

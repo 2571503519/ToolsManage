@@ -52,6 +52,22 @@
         where a.username = #{username}
     </select>
 
+    <select id="findAdminsConditionally" parameterType="admin" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_admin
+        <where>
+            <if test="adminName != null">
+                or admin_name = #{adminName}
+            </if>
+            <if test="idCard != null">
+                or id_card = #{idCard}
+            </if>
+            <if test="state != null">
+                and state = #{state, typeHandler=com.jack.typehandler.StateTypeHandler}
+            </if>
+        </where>
+    </select>
+
     <insert id="saveAdmin" parameterType="admin" useGeneratedKeys="true" keyProperty="adminId">
         <selectKey order="AFTER" keyProperty="adminId" resultType="long">
             SELECT LAST_INSERT_ID()

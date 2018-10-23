@@ -43,6 +43,12 @@
       <artifactId>mybatis</artifactId>
       <version>3.4.1</version>
     </dependency>
+    <!--PageHelper分页插件-->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper</artifactId>
+      <version>5.1.4</version>
+    </dependency>
     <!--数据库连接池-->
     <dependency>
       <groupId>com.alibaba</groupId>

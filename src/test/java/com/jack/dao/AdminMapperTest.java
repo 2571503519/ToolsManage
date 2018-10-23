@@ -86,4 +86,19 @@ public class AdminMapperTest {
         });
     }
 
+    @Test
+    public void testFindAdminsByState() {
+        Admin admin = new Admin();
+        admin.setState(State.AdminState.NORMAL);
+        List<Admin> admins = mapper.findAdminsConditionally(admin);
+        if (admins != null) {
+            logger.info("Query admins by state:");
+            admins.stream().forEach(item -> {
+                logger.info(item.toString());
+            });
+        } else {
+            logger.info("Query result is null.");
+        }
+    }
+
 }

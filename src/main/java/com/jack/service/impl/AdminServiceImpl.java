@@ -1,10 +1,14 @@
 package com.jack.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jack.dao.AdminMapper;
 import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
 import com.jack.service.AdminService;
+import com.jack.util.MD5Util;
+import com.jack.util.PageQuery;
 import com.jack.util.State;
 import com.jack.util.TmResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -24,10 +28,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin findAdminByUsername(String username) {
-        if (username == null)
-            throw new IllegalArgumentException("username is null");
+        if (username == null) return null;
         Admin admin = adminMapper.findAdminByUsername(username);
         return admin;
+    }
+
+    @Override
+    public Admin findAdminByAdminId(Long adminId) {
+        return adminMapper.findAdminByPrimaryKey(adminId);
     }
 
     @Override
@@ -48,35 +56,35 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public TmResponse addAdmin(Admin admin) {
-        // 参数校验
-        String msg = validate(admin);
-        if (msg != null) return TmResponse.fail(msg);
+    public PageInfo<Admin> queryAdminList(PageQuery pageQuery, Admin admin) {
+        if (pageQuery == null) return null;
+        // PageHelper中分页从0和从1开始效果相同
+        PageHelper.startPage(pageQuery.getPage(), pageQuery.getPageSize());
+        // 查询参数
+        String queryParam = pageQuery.getQueryParam();
+        // TODO: 设置查询条件
+        List<Admin> adminList = adminMapper.findAdminsConditionally(admin);
 
+        return new PageInfo<>(adminList);
+    }
+
+    @Override
+    public boolean addAdmin(Admin admin) {
         Admin existedAdmin = findAdminByUsername(admin.getUsername());
         if (existedAdmin != null) {
-            return TmResponse.fail("用户名已存在");
+            return false;
         }
-        // TODO: 将密码加密
 
         // 预设默认值
+        admin.setPassword(MD5Util.encrypt(admin.getPassword()));
         admin.setState(State.AdminState.NORMAL);
 
-        if (!adminMapper.saveAdmin(admin)) {
-            return TmResponse.fail("添加管理员失败");
-        }
-        return TmResponse.success("添加管理员成功");
+        return adminMapper.saveAdmin(admin);
     }
 
-    private String validate(Admin admin) {
-        if (StringUtils.isBlank(admin.getUsername()))
-            return "用户名不能为空";
-        if (StringUtils.isBlank(admin.getPassword()))
-            return "密码不能为空";
-        if (StringUtils.isBlank(admin.getIdCard())) {
-            return "身份证号码不能为空";
-        }
-
-        return null;
+    @Override
+    public boolean updateAdmin(Admin admin) {
+        return adminMapper.updateAdmin(admin);
     }
+
 }

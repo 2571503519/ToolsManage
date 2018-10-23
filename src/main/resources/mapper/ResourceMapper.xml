@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.jack.pojo.entity.Resource">
         <id property="resId" column="res_id"/>
         <result property="resName" column="res_name"/>
+        <result property="resPermission" column="res_permission"/>
         <result property="resUrl" column="res_url"/>
         <result property="resPid" column="res_pid"/>
         <result property="gmtCreate" column="gmt_create"/>
@@ -14,7 +15,7 @@
 
 
     <sql id="AllColumn">
-        res_id, res_name, res_url, res_pid, gmt_create, gmt_modified
+        res_id, res_name, res_permission, res_url, res_pid, gmt_create, gmt_modified
     </sql>
 
     <select id="findResourceByPrimaryKey" resultMap="BaseResultMap">
@@ -27,8 +28,8 @@
         <selectKey order="AFTER" keyProperty="resId" resultType="long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into tm_resource (res_id, res_name, res_url, res_pid, gmt_create, gmt_modified)
-                          value (null, #{resName}, #{resUrl}, #{resPid}, now(), now());
+        insert into tm_resource (res_id, res_name, res_permission, res_url, res_pid, gmt_create, gmt_modified)
+                          value (null, #{resName}, #{resPermission}, #{resUrl}, #{resPid}, now(), now());
     </insert>
 
     <update id="updateResource" parameterType="resource">
@@ -36,6 +37,9 @@
         <set>
             <if test="resName != null">
                 res_name = #{resName},
+            </if>
+            <if test="resPermission != null">
+                res_permission = #{resPermission},
             </if>
             <if test="resUrl != null">
                 res_url = #{resUrl},
