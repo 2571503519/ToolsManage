@@ -18,7 +18,7 @@ public class State {
             this.stateCode = stateCode;
         }
 
-        public static AdminState codeOf(Integer stateCode) {
+        public static AdminState codeOf(Integer stateCode) throws NotFoundCodeException {
             if (stateCode == 2) return NORMAL;
             if (stateCode == 1) return FORBID;
             if (stateCode == 0) return DELETE;

@@ -1,7 +1,10 @@
 package com.jack.dao;
 
 import com.jack.pojo.entity.Role;
+import com.jack.pojo.entity.RoleResource;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/20.
@@ -16,5 +19,7 @@ public interface RoleMapper {
     Role findRoleByPrimaryKey(Long roleId);
 
     boolean deleteRole(Long roleId);
+
+    List<RoleResource> findRoleResourceList(RoleResource roleResource);
 
 }

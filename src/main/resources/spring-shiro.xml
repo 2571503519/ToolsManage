@@ -36,9 +36,9 @@
             <value>
                 <!-- 静态文件 -->
                 /static/** = anon
-                /api/v1/admin/login = anon
-                /api/v1/admin/logut = authc
-                /api/v1/admin/** = authc,roles[root]
+                /admin/login = anon
+                /admin/logut = authc
+                /admin/** = authc,roles[root]
             </value>
         </property>
     </bean>

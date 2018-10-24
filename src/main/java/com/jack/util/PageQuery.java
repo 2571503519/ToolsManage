@@ -8,8 +8,8 @@ import lombok.Setter;
  */
 public class PageQuery {
 
-    // 页码，从1开始
-    @Getter @Setter private Integer page;
+    // 页码，默认从1开始
+    @Getter @Setter private Integer page = 1;
 
     // 单页大小，默认10条数据
     @Getter @Setter private Integer pageSize = 10;

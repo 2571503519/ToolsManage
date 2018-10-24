@@ -1,6 +1,7 @@
 package com.jack.web.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.jack.exception.NotFoundCodeException;
 import com.jack.pojo.entity.Admin;
 import com.jack.service.AdminService;
 import com.jack.util.Constant;
@@ -67,27 +68,20 @@ public class AdminController {
 
     /**
      * 用户登出
-     * @param session
      * @return
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ResponseBody
-    public TmResponse logout(HttpSession session) {
+    public TmResponse logout() {
         SecurityUtils.getSubject().logout();
         return TmResponse.success("用户登出成功");
     }
 
     /**
-     * 测试使用，获取当前登录用户的信息
+     * 根据查询条件获取管理员列表
+     * @param pageQuery 当前页、页的大小、查询的参数
      * @return
      */
-    @RequestMapping(value = "/session", method = RequestMethod.GET)
-    @ResponseBody
-    public TmResponse session() {
-        Session session = SecurityUtils.getSubject().getSession();
-        return TmResponse.success("获取Session信息", session.getAttribute(Constant.LOGINED_USER));
-    }
-
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     public TmResponse adminList(PageQuery pageQuery) {
@@ -123,7 +117,7 @@ public class AdminController {
 
     /**
      * 更新管理员信息
-     * @param admin
+     * @param admin 状态码以字符串的形式传入，例如：NORMAL、FORBID
      * @return
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -139,7 +133,11 @@ public class AdminController {
         }
     }
 
-
+    /**
+     * 获取指定ID的管理员信息
+     * @param adminId
+     * @return
+     */
     @RequestMapping(value = "/find/id/{adminId}", method = RequestMethod.GET)
     @ResponseBody
     public TmResponse findAdmin(@PathVariable Long adminId) {
@@ -151,11 +149,28 @@ public class AdminController {
         return TmResponse.success("查询用户信息", admin);
     }
 
+    /**
+     * 更新用户状态
+     * @param adminId 管理员ID
+     * @param stateCode 状态码，整型
+     * @return
+     */
     @RequestMapping(value = "/state/id/{adminId}/code/{stateCode}", method = RequestMethod.GET)
     @ResponseBody
     public TmResponse changeAdminState(@PathVariable Long adminId, @PathVariable Integer stateCode) {
 
-        return TmResponse.success("修改用户状态");
+        Admin admin = new Admin();
+        try {
+            admin.setState(State.AdminState.codeOf(stateCode));
+        } catch (NotFoundCodeException nfe) {
+            return TmResponse.fail("参数错误");
+        }
+        admin.setAdminId(adminId);
+        if (adminService.updateAdmin(admin)) {
+            return TmResponse.success("管理员状态更新成功");
+        } else {
+            return TmResponse.fail("管理员状态更新失败");
+        }
     }
 
 

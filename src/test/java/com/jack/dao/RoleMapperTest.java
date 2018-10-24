@@ -1,6 +1,8 @@
 package com.jack.dao;
 
+import com.google.common.base.Optional;
 import com.jack.pojo.entity.Role;
+import com.jack.pojo.entity.RoleResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -8,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/20.
@@ -55,6 +59,20 @@ public class RoleMapperTest {
     public void testDeleteRole() {
         boolean res = mapper.deleteRole(1L);
         logger.info("Test: delete a role, Result: {}", res);
+    }
+
+    @Test
+    public void testFindRoleResourceList() {
+        RoleResource roleResource = new RoleResource();
+        roleResource.setRoleName("user");
+        List<RoleResource> roleResources = mapper.findRoleResourceList(roleResource);
+        if (roleResources == null || roleResources.size() == 0) {
+            logger.info("result is null");
+            return;
+        }
+        roleResources.stream().forEach(item -> {
+            logger.info(item.toString());
+        });
     }
 
 }
