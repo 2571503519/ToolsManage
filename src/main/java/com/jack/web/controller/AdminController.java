@@ -1,9 +1,13 @@
 package com.jack.web.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.jack.exception.NotFoundCodeException;
 import com.jack.pojo.entity.Admin;
+import com.jack.pojo.entity.Role;
 import com.jack.service.AdminService;
+import com.jack.service.RoleService;
 import com.jack.util.Constant;
 import com.jack.util.PageQuery;
 import com.jack.util.State;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/15.
@@ -36,6 +41,9 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private RoleService roleService;
 
     /**
      * 用户登录
@@ -174,6 +182,31 @@ public class AdminController {
     }
 
 
+    /**
+     * 为用户分配角色
+     * @param admin 用户
+     * @param roleIds 角色ID的集合
+     * @return
+     */
+    @RequestMapping(value = "/role/save", method = RequestMethod.POST)
+    @ResponseBody
+    public TmResponse assignRolesForAdmin(Admin admin, List<Long> roleIds) {
+        Preconditions.checkArgument(admin == null, "admin must be not null");
+        Preconditions.checkArgument(admin.getAdminId() == null, "adminId must be not null");
+
+        Admin existedAdmin = adminService.findAdminByAdminId(admin.getAdminId());
+        if (existedAdmin == null) return TmResponse.fail("对应用户不存在, adminId=" + admin.getAdminId());
+        for (Long roleId : roleIds) {
+            Role role = roleService.findRoleByRoleId(Optional.of(roleId));
+            if (role == null) return TmResponse.fail("对应角色不存在, roleId=" + roleId);
+        }
+
+        boolean result = adminService.assignRolesForAdmin(admin, roleIds);
+
+        return result ? TmResponse.success("分配角色成功") : TmResponse.fail("分配角色失败");
+    }
+
+/*------------------------------------------------内部私有函数-----------------------------------------------------------*/
 
     /**
      * 添加管理员时，校验前端传来的参数

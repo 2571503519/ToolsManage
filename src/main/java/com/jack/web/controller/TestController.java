@@ -4,6 +4,7 @@ import com.jack.util.TmResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,6 +23,19 @@ public class TestController {
     public TmResponse<String[]> index() {
         TmResponse tmResponse = TmResponse.success("请求成功", new String[]{"book", "bycle"});
         return tmResponse;
+    }
+
+    @RequestMapping("/error")
+    @ResponseBody
+    public TmResponse error() {
+        throw new IllegalArgumentException("参数错误");
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    @ResponseBody
+    public TmResponse handleError(IllegalArgumentException e) {
+
+        return TmResponse.fail(e.getMessage());
     }
 
 

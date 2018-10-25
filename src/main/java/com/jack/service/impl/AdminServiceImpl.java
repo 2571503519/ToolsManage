@@ -2,8 +2,10 @@ package com.jack.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.jack.dao.AdminMapper;
 import com.jack.pojo.entity.Admin;
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
 import com.jack.service.AdminService;
@@ -85,6 +87,24 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public boolean updateAdmin(Admin admin) {
         return adminMapper.updateAdmin(admin);
+    }
+
+    @Override
+    public boolean assignRolesForAdmin(Admin admin, List<Long> roleIds) {
+        /* 由于参数的校验在Controller做过，所以这里没有做参数校验。若将此接口开放为RPC接口，则需要做参数校验 */
+
+        // 构造AdminRole对象的集合
+        List<AdminRole> adminRoleList = Lists.newArrayList();
+        AdminRole adminRole = null;
+        for (Long roleId : roleIds) {
+            adminRole = new AdminRole();
+            adminRole.setAdminId(admin.getAdminId());
+            adminRole.setRoleId(roleId);
+            adminRoleList.add(adminRole);
+        }
+
+        int rows = adminMapper.saveAdminRoles(adminRoleList);
+        return rows > 0 ? true : false;
     }
 
 }

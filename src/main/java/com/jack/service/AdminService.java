@@ -66,4 +66,6 @@ public interface AdminService {
     boolean updateAdmin(Admin admin);
 
 
+    boolean assignRolesForAdmin(Admin admin, List<Long> roleIds);
+
 }

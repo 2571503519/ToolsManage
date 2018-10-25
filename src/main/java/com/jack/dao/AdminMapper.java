@@ -1,9 +1,11 @@
 package com.jack.dao;
 
 import com.jack.pojo.entity.Admin;
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
 import com.jack.util.State;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,4 +31,6 @@ public interface AdminMapper {
      List<Resource> findResourcesByUsername(String username);
 
      List<Admin> findAdminsConditionally(Admin state);
+
+     int saveAdminRoles(@Param("adminRoleList") List<AdminRole> adminRoleList);
 }

@@ -77,7 +77,14 @@
         , #{resIds, typeHandler=com.jack.typehandler.StringListTypeHandler}, #{state, typeHandler=com.jack.typehandler.StateTypeHandler}, now(), now());
     </insert>
 
-
+    <insert id="saveAdminRoles" parameterType="list">
+        insert into tm_admin_role (`id`, admin_id, role_id)
+        values
+        <foreach collection="adminRoleList" item="adminRole" separator=",">
+            (null, #{adminRole.adminId}, #{adminRole.roleId})
+        </foreach>
+    </insert>
+    
     <!--注意：username是MySQL中的关键字，所以需要加上``-->
     <update id="updateAdmin" parameterType="admin">
         update tm_admin

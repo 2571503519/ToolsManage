@@ -2,6 +2,7 @@ package com.jack.dao;
 
 import com.google.common.collect.Lists;
 import com.jack.pojo.entity.Admin;
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
 import com.jack.util.State;
@@ -99,6 +100,21 @@ public class AdminMapperTest {
         } else {
             logger.info("Query result is null.");
         }
+    }
+
+    @Test
+    public void testSaveAdminRoles() {
+        List<AdminRole> adminRoleList = Lists.newArrayList();
+        AdminRole adminRole = null;
+        for (int i = 0; i < 4; i++) {
+            adminRole = new AdminRole();
+            adminRole.setAdminId((long) (i+1));
+            adminRole.setRoleId((long) (i+1));
+            adminRoleList.add(adminRole);
+        }
+
+        int rows = mapper.saveAdminRoles(adminRoleList);
+        logger.info("Test: save adminRole list, Result: effect {} rows", rows);
     }
 
 }
