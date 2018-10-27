@@ -56,4 +56,21 @@ public class RoleServiceTest {
         logger.info("Result: Page content size = " + pageInfo.getList().size());
     }
 
+    @Test
+    public void testSaveRole() {
+        Role role = new Role();
+        role.setRoleName("super");
+        boolean res = service.saveRole(role);
+        logger.info("Test: save a role, Result: " + res);
+    }
+
+    @Test
+    public void testUpdateRole() {
+        Role role = new Role();
+        role.setRoleId(5L);
+        role.setRoleName("VIP用户");
+        boolean res = service.updateRole(role);
+        logger.info("Test: update a role, Result: " + res);
+    }
+
 }

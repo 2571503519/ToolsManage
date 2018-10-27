@@ -38,7 +38,7 @@
                 /static/** = anon
                 /admin/login = anon
                 /admin/logut = authc
-                /admin/** = authc,roles[root]
+                /admin/** = authc,roles[admin]
             </value>
         </property>
     </bean>

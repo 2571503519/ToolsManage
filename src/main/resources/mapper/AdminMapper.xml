@@ -33,7 +33,7 @@
 
     <select id="findRolesByUsername" parameterType="string" resultType="role">
         select distinct
-        r.role_id as roleId, r.role_name as roleName, r.gmt_create as gmtCreate, r.gmt_modified as gmtModified
+        r.role_id as roleId, r.role_name as roleName, r.role_code as roleCode, r.gmt_create as gmtCreate, r.gmt_modified as gmtModified
         from tm_admin a
         left join tm_admin_role ar on a.admin_id = ar.admin_id
         left join tm_role r on ar.role_id = r.role_id
@@ -61,6 +61,9 @@
             </if>
             <if test="idCard != null">
                 or id_card = #{idCard}
+            </if>
+            <if test="deptId != null">
+                or dept_id = #{deptId}
             </if>
             <if test="state != null">
                 and state = #{state, typeHandler=com.jack.typehandler.StateTypeHandler}

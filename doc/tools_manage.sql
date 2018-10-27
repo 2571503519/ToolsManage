@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-10-22 18:57:40
+Date: 2018-10-27 13:15:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -26,13 +26,13 @@ CREATE TABLE `tm_admin` (
   `id_card` varchar(30) DEFAULT NULL COMMENT '管理员身份证号码',
   `admin_name` varchar(30) DEFAULT NULL COMMENT '管理员姓名',
   `dept_id` int(11) unsigned NOT NULL COMMENT '所属部门ID',
-  `res_ids` varchar(255) DEFAULT NULL COMMENT '管理员拥有资源ID的集合，格式为 1,2,3,4',
+  `res_ids` varchar(255) DEFAULT NULL COMMENT '管理员拥有资源ID的集合，格式为 1,2,3,4。已废弃字段',
   `state` tinyint(4) unsigned NOT NULL COMMENT '管理员状态，正常 2、禁用 1、删除 0',
   `gmt_create` datetime NOT NULL COMMENT '记录创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '记录更改时间',
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `uk_username` (`username`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_admin
@@ -41,10 +41,26 @@ INSERT INTO `tm_admin` VALUES ('2', '2570150.7496842077323721', '2570150.7225363
 INSERT INTO `tm_admin` VALUES ('4', '2570150.7814951591305326', '2570150.9300681180400625', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-13 20:25:58', '2018-10-13 20:25:58');
 INSERT INTO `tm_admin` VALUES ('5', '2570150.01980616904320598', '2570150.5047681413731622', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-17 20:23:48', '2018-10-17 20:23:48');
 INSERT INTO `tm_admin` VALUES ('6', '2570150.6050227960715377', '2570150.404798235553643', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-19 18:53:53', '2018-10-19 18:53:53');
-INSERT INTO `tm_admin` VALUES ('7', 'admin', '21232f297a57a5a743894a0e4a801fc3', '46546546546465', 'jack', '2', '1,2,3', '2', '2018-10-20 17:52:14', '2018-10-20 17:52:19');
+INSERT INTO `tm_admin` VALUES ('7', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'fsdf', 'sdfsd', '3', '1,2,3', '1', '2018-10-20 17:52:14', '2018-10-24 12:27:47');
 INSERT INTO `tm_admin` VALUES ('8', 'zhangjiale', '123', '1234', 'Jack', '1', '1', '2', '2018-10-21 14:27:24', '2018-10-21 14:27:24');
 INSERT INTO `tm_admin` VALUES ('9', 'zhangjiale1', '11', 'fsdf', '', '1', '', '2', '2018-10-21 14:29:50', '2018-10-21 14:29:50');
 INSERT INTO `tm_admin` VALUES ('10', 'zhangjiale12', '11', 'fsdf', 'sdfsd', '1', null, '2', '2018-10-21 14:33:20', '2018-10-21 14:33:20');
+INSERT INTO `tm_admin` VALUES ('11', 'zhangjiale123', '6512bd43d9caa6e02c990b0a82652dca', 'fsdf', 'zhang', '3', null, '2', '2018-10-23 22:47:10', '2018-10-23 22:51:36');
+
+-- ----------------------------
+-- Table structure for `tm_admin_repertory`
+-- ----------------------------
+DROP TABLE IF EXISTS `tm_admin_repertory`;
+CREATE TABLE `tm_admin_repertory` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) unsigned NOT NULL,
+  `rep_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tm_admin_repertory
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `tm_admin_role`
@@ -55,7 +71,7 @@ CREATE TABLE `tm_admin_role` (
   `admin_id` int(11) unsigned DEFAULT NULL,
   `role_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_admin_role
@@ -118,9 +134,9 @@ CREATE TABLE `tm_resource` (
 -- ----------------------------
 -- Records of tm_resource
 -- ----------------------------
-INSERT INTO `tm_resource` VALUES ('1', '库房管理', null, '/api/v1/repertory', '0', '2018-10-12 21:15:51', '2018-10-12 21:15:51');
-INSERT INTO `tm_resource` VALUES ('2', '部门管理', null, '/api/v1/dept', '0', '2018-10-21 09:49:53', '2018-10-21 09:49:56');
-INSERT INTO `tm_resource` VALUES ('5', '库房管理', null, '/api/v2/repertory', '0', '2018-10-22 12:55:56', '2018-10-22 12:55:56');
+INSERT INTO `tm_resource` VALUES ('1', '库房管理', 'respotery:list', '/api/v1/repertory', '0', '2018-10-12 21:15:51', '2018-10-12 21:15:51');
+INSERT INTO `tm_resource` VALUES ('2', '部门管理', 'dept:list', '/api/v1/dept', '0', '2018-10-21 09:49:53', '2018-10-21 09:49:56');
+INSERT INTO `tm_resource` VALUES ('5', '库房管理1', 'respotery:list', '/api/v2/repertory', '0', '2018-10-22 12:55:56', '2018-10-22 12:55:56');
 
 -- ----------------------------
 -- Table structure for `tm_role`
@@ -129,17 +145,20 @@ DROP TABLE IF EXISTS `tm_role`;
 CREATE TABLE `tm_role` (
   `role_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `role_name` varchar(50) DEFAULT NULL COMMENT '角色名',
+  `role_code` varchar(50) NOT NULL COMMENT '角色代码，例如：admin',
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime NOT NULL,
-  PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`role_id`),
+  UNIQUE KEY `uk_role_code` (`role_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_role
 -- ----------------------------
-INSERT INTO `tm_role` VALUES ('1', 'admin', '2018-10-21 09:26:15', '2018-10-21 09:26:17');
-INSERT INTO `tm_role` VALUES ('2', 'user', '2018-10-21 09:26:45', '2018-10-21 09:26:48');
-INSERT INTO `tm_role` VALUES ('3', 'root', '2018-10-21 13:33:49', '2018-10-21 13:33:53');
+INSERT INTO `tm_role` VALUES ('1', '管理员', 'admin', '2018-10-21 09:26:15', '2018-10-21 09:26:17');
+INSERT INTO `tm_role` VALUES ('2', '用户', 'user', '2018-10-21 09:26:45', '2018-10-21 09:26:48');
+INSERT INTO `tm_role` VALUES ('3', '超级管理员', 'root', '2018-10-21 13:33:49', '2018-10-21 13:33:53');
+INSERT INTO `tm_role` VALUES ('5', '超级用户', 'super', '2018-10-26 11:55:17', '2018-10-26 11:55:17');
 
 -- ----------------------------
 -- Table structure for `tm_role_resource`
@@ -150,13 +169,14 @@ CREATE TABLE `tm_role_resource` (
   `role_id` int(11) unsigned DEFAULT NULL,
   `res_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_role_resource
 -- ----------------------------
 INSERT INTO `tm_role_resource` VALUES ('1', '1', '1');
 INSERT INTO `tm_role_resource` VALUES ('2', '1', '2');
+INSERT INTO `tm_role_resource` VALUES ('3', '1', '5');
 
 -- ----------------------------
 -- Table structure for `tm_tool`
@@ -186,7 +206,7 @@ CREATE TABLE `tm_tool` (
 DROP TABLE IF EXISTS `tm_tool_bag`;
 CREATE TABLE `tm_tool_bag` (
   `tb_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `rfid_code` varchar(64) DEFAULT NULL COMMENT '工具包上的RFID标签码',
+  `rfid_code` varchar(64) DEFAULT NULL COMMENT '工具包上所有RFID标签的ID集合，例如：1,2,3,4',
   `rfid_reader_code` varchar(64) DEFAULT NULL COMMENT 'RFID读取器机器码',
   `type` varchar(20) NOT NULL DEFAULT '' COMMENT '工具包型号，大 BIG、中 MEDIUM、小 SMALL',
   `rep_id` int(11) unsigned NOT NULL COMMENT '所属库房ID',

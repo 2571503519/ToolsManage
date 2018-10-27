@@ -24,6 +24,25 @@
         where res_id = #{resId}
     </select>
 
+    <select id="findResourcesConditionally" parameterType="resource" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_resource
+        <where>
+            <if test="resName != null">
+                or res_name = #{resName}
+            </if>
+            <if test="resPermission != null">
+                or res_permission = #{resPermission}
+            </if>
+            <if test="resUrl != null">
+                or res_url = #{resUrl}
+            </if>
+            <if test="resPid != null">
+                and res_pid = #{resPid}
+            </if>
+        </where>
+    </select>
+
     <insert id="saveResource" parameterType="resource" useGeneratedKeys="true" keyProperty="resId">
         <selectKey order="AFTER" keyProperty="resId" resultType="long">
             SELECT LAST_INSERT_ID()

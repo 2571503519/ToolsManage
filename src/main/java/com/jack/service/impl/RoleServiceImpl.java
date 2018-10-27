@@ -10,6 +10,7 @@ import com.jack.pojo.entity.Role;
 import com.jack.pojo.entity.RoleResource;
 import com.jack.service.RoleService;
 import com.jack.util.PageQuery;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +62,16 @@ public class RoleServiceImpl implements RoleService {
         }
         return null;
     }
+
+    @Override
+    public boolean saveRole(Role role) {
+        return roleMapper.saveRole(role);
+    }
+
+    @Override
+    public boolean updateRole(Role role) {
+        return roleMapper.updateRole(role);
+    }
+
 
 }

@@ -27,4 +27,8 @@ public interface RoleService {
 
     Role findRoleByRoleId(Optional<Long> roleId);
 
+    boolean saveRole(Role role);
+
+    boolean updateRole(Role role);
+
 }

@@ -6,12 +6,13 @@
     <resultMap id="BaseResultMap" type="com.jack.pojo.entity.Role">
         <id property="roleId" column="role_id"/>
         <result property="roleName" column="role_name"/>
+        <result property="roleCode" column="role_code"/>
         <result property="gmtCreate" column="gmt_create"/>
         <result property="gmtModified" column="gmt_modified"/>
     </resultMap>
 
     <sql id="AllColumn">
-        role_id, role_name, gmt_create, gmt_modified
+        role_id, role_name, role_code, gmt_create, gmt_modified
     </sql>
 
     <select id="findRoleByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
@@ -20,16 +21,22 @@
         where role_id = #{roleId}
     </select>
 
+    <select id="findRoleByRoleCode" parameterType="string" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_role
+        where role_code = #{roleCode}
+    </select>
+
     <select id="findRoleResourceList" parameterType="roleResource" resultType="roleResource">
-        select r.role_id as roleId, r.role_name as roleName, res.res_id as resId
+        select r.role_id as roleId, r.role_name as roleName, r.role_code as roleCode, res.res_id as resId
         , res.res_name as resName, res.res_permission as resPermission
         , res.res_url as resUrl, r.gmt_create as gmtCreate, r.gmt_modified as gmtModified
         from tm_role as r
         left join tm_role_resource rr on r.role_id = rr.role_id
         left join tm_resource res on res.res_id = rr.res_id
         where r.role_id is not null  and res.res_id is not null
-            <if test="roleName != null">
-                and r.role_name = #{roleName}
+            <if test="roleCode != null">
+                and r.role_code = #{roleCode}
             </if>
     </select>
 
@@ -37,8 +44,8 @@
         <selectKey order="AFTER" keyProperty="roleId" resultType="long">
             select LAST_INSERT_ID();
         </selectKey>
-        insert into tm_role (role_id, role_name, gmt_create, gmt_modified)
-        value (NULL, #{roleName}, now(), now());
+        insert into tm_role (role_id, role_name, role_code, gmt_create, gmt_modified)
+        value (NULL, #{roleName}, #{roleCode}, now(), now());
     </insert>
 
     <update id="updateRole" parameterType="role">
@@ -46,6 +53,9 @@
         <set>
             <if test="roleName != null">
                 `role_name` = #{roleName},
+            </if>
+            <if test="roleCode != null">
+                `role_code` = #{roleCode},
             </if>
             <if test="true">
                 gmt_modified = now(),

@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface ResourceService {
 
-    List<Resource> findResourceList();
+    List<Resource> findResourceList(Resource resource);
 
 }

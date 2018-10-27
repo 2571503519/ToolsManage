@@ -22,6 +22,8 @@ public class PageQuery {
     // 查询参数
     @Getter @Setter private String queryParam;
 
+    public PageQuery() {}
+
     public PageQuery(int currentPage, int pageSize) {
         this.page = currentPage;
         this.pageSize = pageSize;

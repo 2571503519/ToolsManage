@@ -29,6 +29,7 @@ public class RoleMapperTest {
     public void testSaveRole() {
         Role role = new Role();
         role.setRoleName("管理员");
+        role.setRoleCode("admin");
         boolean res = mapper.saveRole(role);
         logger.info("Test: save a role, Result: {}, roleId = {}", res, role.getRoleId());
     }
@@ -64,7 +65,7 @@ public class RoleMapperTest {
     @Test
     public void testFindRoleResourceList() {
         RoleResource roleResource = new RoleResource();
-        roleResource.setRoleName("user");
+        roleResource.setRoleCode("admin");
         List<RoleResource> roleResources = mapper.findRoleResourceList(roleResource);
         if (roleResources == null || roleResources.size() == 0) {
             logger.info("result is null");

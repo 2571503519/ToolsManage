@@ -6,6 +6,7 @@ import com.jack.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,12 +16,14 @@ import java.util.List;
 public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
-    private ResourceMapper resourceMapper;
+    private ResourceMapper rscMapper;
 
     @Override
-    public List<Resource> findResourceList() {
+    public List<Resource> findResourceList(Resource resource) {
+        List<Resource> resourceList = rscMapper.findResourcesConditionally(resource);
 
-        return null;
+        return (resourceList == null || resourceList.size() < 1)
+                ? Collections.EMPTY_LIST : resourceList;
     }
 
 }

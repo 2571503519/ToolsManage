@@ -16,6 +16,8 @@ public class RoleResource {
 
     @Getter @Setter private String roleName;
 
+    @Getter @Setter private String roleCode;
+
     @Getter @Setter private Long resId;
 
     @Getter @Setter private String resName;

@@ -99,7 +99,7 @@ public class MyRealm extends AuthorizingRealm {
 		List<Role> roleList = adminService.findRolesByUsername(username);
 		Set<String> roles = new HashSet<>(roleList.size());
 		roleList.stream().forEach(role -> {
-			roles.add(role.getRoleName());
+			roles.add(role.getRoleCode());
 		});
 		return roles;
 	}

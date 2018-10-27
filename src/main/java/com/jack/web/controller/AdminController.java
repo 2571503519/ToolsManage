@@ -3,6 +3,7 @@ package com.jack.web.controller;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.jack.exception.NotFoundCodeException;
 import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Role;
@@ -21,14 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
+import static javax.swing.UIManager.get;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/15.
@@ -92,10 +93,9 @@ public class AdminController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public TmResponse adminList(PageQuery pageQuery) {
+    public TmResponse adminList(PageQuery pageQuery, Admin admin) {
+        if (admin.getState() == null) admin.setState(State.AdminState.NORMAL);
 
-        Admin admin = new Admin();
-        admin.setState(State.AdminState.NORMAL);
         PageInfo<Admin> adminPageInfo = adminService.queryAdminList(pageQuery, admin);
         return TmResponse.success("获取管理员列表", adminPageInfo);
     }
@@ -184,15 +184,25 @@ public class AdminController {
 
     /**
      * 为用户分配角色
-     * @param admin 用户
-     * @param roleIds 角色ID的集合
+     * @param params 参数，包含了用户和角色ID的集合
      * @return
      */
     @RequestMapping(value = "/role/save", method = RequestMethod.POST)
     @ResponseBody
-    public TmResponse assignRolesForAdmin(Admin admin, List<Long> roleIds) {
-        Preconditions.checkArgument(admin == null, "admin must be not null");
-        Preconditions.checkArgument(admin.getAdminId() == null, "adminId must be not null");
+    public TmResponse assignRolesForAdmin(@RequestBody Map<String, Object> params) {
+        // 转换从参数为合法格式
+        Admin admin = new Admin();
+        Integer adminId = (Integer) params.get("adminId");
+        admin.setAdminId(Long.parseLong(adminId.toString()));
+
+        List<Integer> roleIdsRaw = (List<Integer>) params.get("roleIds");
+        List<Long> roleIds = Lists.newArrayList();
+        for (Integer item : roleIdsRaw) {
+            roleIds.add(Long.parseLong(item.toString()));
+        }
+
+        Preconditions.checkArgument(admin != null, "admin must be not null");
+        Preconditions.checkArgument(admin.getAdminId() != null, "adminId must be not null");
 
         Admin existedAdmin = adminService.findAdminByAdminId(admin.getAdminId());
         if (existedAdmin == null) return TmResponse.fail("对应用户不存在, adminId=" + admin.getAdminId());

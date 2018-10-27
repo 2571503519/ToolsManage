@@ -18,6 +18,8 @@ public interface RoleMapper {
 
     Role findRoleByPrimaryKey(Long roleId);
 
+    Role findRoleByRoleCode(String roleCode);
+
     boolean deleteRole(Long roleId);
 
     List<RoleResource> findRoleResourceList(RoleResource roleResource);

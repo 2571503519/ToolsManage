@@ -16,6 +16,8 @@ public class Role {
 
     @Getter @Setter private String roleName;
 
+    @Getter @Setter private String roleCode;
+
     @Getter @Setter private Timestamp gmtCreate;
 
     @Getter @Setter private Timestamp gmtModified;
