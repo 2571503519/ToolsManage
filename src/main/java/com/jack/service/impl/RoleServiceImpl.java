@@ -40,22 +40,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public PageInfo<RoleResource> findRoleResourceList(PageQuery pageQuery, Optional<RoleResource> roleResource) {
-        // 分页参数校验
-        if (pageQuery != null && pageQuery.getPage() >= 0 && pageQuery.getPageSize() > 0) {
-            PageHelper.startPage(
-                    pageQuery.getPage(), pageQuery.getPageSize()
-            );
-        } else {
-            throw new PageQueryException(pageQuery.getPage(), pageQuery.getPageSize());
-        }
-        // 查询条件校验
-        if (roleResource.isPresent()) {
-            List<RoleResource> roleResourceList = roleMapper.findRoleResourceList(roleResource.get());
-            // 如何结果为Null，则返回空集合，否则返回查询出的集合
-            return roleResourceList == null ? new PageInfo<>(Collections.EMPTY_LIST) : new PageInfo<>(roleResourceList);
-        } else {
-            return new PageInfo<>(Collections.EMPTY_LIST);
-        }
+        // 开启分页查询
+        PageHelper.startPage(pageQuery.getPage(), pageQuery.getPageSize());
+
+        List<RoleResource> roleResourceList = roleMapper.findRoleResourceList(roleResource.get());
+        // 如何结果为Null，则返回空集合，否则返回查询出的集合
+        return roleResourceList == null ? new PageInfo<>(Collections.EMPTY_LIST) : new PageInfo<>(roleResourceList);
     }
 
     @Override
@@ -67,6 +57,15 @@ public class RoleServiceImpl implements RoleService {
             return roleMapper.findRoleByPrimaryKey(roleId.get());
         }
         return null;
+    }
+
+    @Override
+    public Role findRoleByRoleCode(Optional<String> roleCode) {
+        if (roleCode.isPresent()) {
+            return roleMapper.findRoleByRoleCode(roleCode.get());
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -93,6 +92,18 @@ public class RoleServiceImpl implements RoleService {
 
         int rows = adminMapper.saveAdminRoles(adminRoleList);
         return rows > 0 ? true : false;
+    }
+
+    @Override
+    public boolean adminRoleExisted(AdminRole adminRole) {
+        Preconditions.checkArgument(adminRole != null, "adminRole can not be null, adminRole=" + adminRole);
+        Long adminId = adminRole.getAdminId();
+        Long roleId = adminRole.getRoleId();
+        Preconditions.checkArgument((adminId != null && adminId > 0), "adminId can not be null or negative, adminId=" + adminId);
+        Preconditions.checkArgument((roleId != null && roleId > 0), "roleId can not be null or negative, roleId=" + roleId);
+
+        AdminRole existedAdminRole = roleMapper.adminRoleExisted(adminRole);
+        return existedAdminRole != null ? true : false;
     }
 
 

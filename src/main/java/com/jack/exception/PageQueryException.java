@@ -3,7 +3,7 @@ package com.jack.exception;
 /**
  * Created by Jackaroo Zhang on 2018/10/25.
  */
-public class PageQueryException extends RuntimeException {
+public class PageQueryException extends IllegalArgumentException {
 
 
     public PageQueryException(String message) {

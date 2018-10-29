@@ -27,6 +27,12 @@
         where role_code = #{roleCode}
     </select>
 
+    <select id="adminRoleExisted" parameterType="adminRole" resultType="adminRole">
+        select id, admin_id as adminId, role_id as roleId
+        from tm_admin_role
+        where admin_id = #{adminId} and role_id = #{roleId}
+    </select>
+
     <select id="findRoleResourceList" parameterType="roleResource" resultType="roleResource">
         select r.role_id as roleId, r.role_name as roleName, r.role_code as roleCode, res.res_id as resId
         , res.res_name as resName, res.res_permission as resPermission

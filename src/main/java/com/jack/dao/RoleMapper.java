@@ -1,5 +1,6 @@
 package com.jack.dao;
 
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Role;
 import com.jack.pojo.entity.RoleResource;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,8 @@ public interface RoleMapper {
     Role findRoleByPrimaryKey(Long roleId);
 
     Role findRoleByRoleCode(String roleCode);
+
+    AdminRole adminRoleExisted(AdminRole adminRole);
 
     boolean deleteRole(Long roleId);
 

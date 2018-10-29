@@ -175,7 +175,7 @@ public class AdminController {
         try {
             admin.setState(State.AdminState.codeOf(stateCode));
         } catch (NotFoundCodeException nfe) {
-            return TmResponse.fail("参数错误");
+            return TmResponse.fail("stateCode Not Defined, stateCode=" + stateCode);
         }
         admin.setAdminId(adminId);
         if (adminService.updateAdmin(admin)) {
@@ -194,20 +194,20 @@ public class AdminController {
     @RequestMapping(value = "/role/save", method = RequestMethod.POST)
     @ResponseBody
     public TmResponse assignRolesForAdmin(@RequestBody Map<String, Object> params) {
-        // 转换从参数为合法格式
+        // 转换从参数为合法格式，并对参数进行校验
         Admin admin = new Admin();
         Integer adminId = (Integer) params.get("adminId");
+        Preconditions.checkArgument((adminId != null && adminId > 0), "adminId cat not be null or negative, adminId=" + adminId);
         admin.setAdminId(Long.parseLong(adminId.toString()));
 
         List<Integer> roleIdsRaw = (List<Integer>) params.get("roleIds");
+        Preconditions.checkArgument((roleIdsRaw != null && roleIdsRaw.size() > 0), "roleIds can not be empty");
         List<Long> roleIds = Lists.newArrayList();
         for (Integer item : roleIdsRaw) {
             roleIds.add(Long.parseLong(item.toString()));
         }
 
-        Preconditions.checkArgument(admin != null, "admin must be not null");
-        Preconditions.checkArgument(admin.getAdminId() != null, "adminId must be not null");
-
+        // 逻辑判断，用户和角色都必须存在，才可以进行分配
         Admin existedAdmin = adminService.findAdminByAdminId(admin.getAdminId());
         if (existedAdmin == null) return TmResponse.fail("对应用户不存在, adminId=" + admin.getAdminId());
         for (Long roleId : roleIds) {

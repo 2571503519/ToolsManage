@@ -3,6 +3,7 @@ package com.jack.service;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Optional;
 import com.jack.exception.PageQueryException;
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Role;
 import com.jack.pojo.entity.RoleResource;
 import com.jack.util.PageQuery;
@@ -27,10 +28,14 @@ public interface RoleService {
 
     Role findRoleByRoleId(Optional<Long> roleId);
 
+    Role findRoleByRoleCode(Optional<String> roleCode);
+
     boolean saveRole(Role role);
 
     boolean updateRole(Role role);
 
     boolean assignAdminsForRole(Role role, List<Long> adminIds);
+
+    boolean adminRoleExisted(AdminRole adminRole);
 
 }

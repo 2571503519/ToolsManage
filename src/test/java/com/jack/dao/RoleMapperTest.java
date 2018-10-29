@@ -1,6 +1,7 @@
 package com.jack.dao;
 
 import com.google.common.base.Optional;
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Role;
 import com.jack.pojo.entity.RoleResource;
 import org.junit.Test;
@@ -74,6 +75,15 @@ public class RoleMapperTest {
         roleResources.stream().forEach(item -> {
             logger.info(item.toString());
         });
+    }
+
+    @Test
+    public void testAdminRoleExisted() {
+        AdminRole adminRole = new AdminRole();
+        adminRole.setAdminId(12L);
+        adminRole.setRoleId(3L);
+        AdminRole existedAdminRole = mapper.adminRoleExisted(adminRole);
+        logger.info("Test: adminRole is existed, Result: " + existedAdminRole);
     }
 
 }
