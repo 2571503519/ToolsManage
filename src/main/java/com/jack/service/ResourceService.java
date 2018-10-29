@@ -1,5 +1,7 @@
 package com.jack.service;
 
+import com.jack.dto.ResourceDTO;
+import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 
 import java.util.List;
@@ -10,5 +12,7 @@ import java.util.List;
 public interface ResourceService {
 
     List<Resource> findResourceList(Resource resource);
+
+    List<ResourceDTO> findResourcesForAdmin(Admin admin);
 
 }

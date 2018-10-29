@@ -31,4 +31,6 @@ public interface RoleService {
 
     boolean updateRole(Role role);
 
+    boolean assignAdminsForRole(Role role, List<Long> adminIds);
+
 }

@@ -43,6 +43,12 @@
         </where>
     </select>
 
+    <select id="findResourcesByResPid" parameterType="long" resultMap="BaseResultMap">
+        select <include refid="AllColumn"/>
+        from tm_resource
+        where res_pid = #{resPid}
+    </select>
+
     <insert id="saveResource" parameterType="resource" useGeneratedKeys="true" keyProperty="resId">
         <selectKey order="AFTER" keyProperty="resId" resultType="long">
             SELECT LAST_INSERT_ID()

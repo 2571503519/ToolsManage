@@ -3,6 +3,7 @@ package com.jack.web.controller;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.jack.pojo.entity.Role;
 import com.jack.pojo.entity.RoleResource;
 import com.jack.service.RoleService;
@@ -12,6 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/24.
@@ -64,6 +68,32 @@ public class RoleController {
 
         boolean res = roleService.updateRole(role);
         return res ? TmResponse.success("角色信息更新成功") : TmResponse.fail("角色信息更新失败");
+    }
+
+
+    @RequestMapping(value = "/admin/save", method = RequestMethod.POST)
+    @ResponseBody
+    public TmResponse assignAdminsForRole(@RequestBody Map<String, Object> params) {
+        // 参数转换
+        Role role = new Role();
+        Integer roleId = (Integer) params.get("roleId");
+        // 校验roleId
+        Preconditions.checkArgument((roleId != null && roleId > 0)
+                , "roleId can not be null and negative, roleId=" + roleId);
+        role.setRoleId(Long.parseLong(roleId.toString()));
+
+        List<Integer> adminIdsRaw = (List<Integer>) params.get("adminIds");
+        Preconditions.checkArgument(adminIdsRaw != null, "adminIds can not be null, adminIds=" + adminIdsRaw);
+
+        List<Long> adminIds = Lists.newArrayList();
+        for (Integer item : adminIdsRaw) {
+            adminIds.add(Long.parseLong(item.toString()));
+        }
+
+
+        boolean result = roleService.assignAdminsForRole(role, adminIds);
+
+        return result ? TmResponse.success("分配用户成功") : TmResponse.fail("分配用户失败");
     }
 
 

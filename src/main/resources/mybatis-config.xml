@@ -4,6 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
+    <settings>
+        <!-- 测试阶段关闭缓存，生产环境下需要开启 -->
+        <setting name="cacheEnabled" value="false"/>
+    </settings>
+
     <typeAliases>
         <package name="com.jack.pojo.entity"/>
     </typeAliases>

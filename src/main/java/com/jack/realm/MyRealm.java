@@ -7,10 +7,8 @@ import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
 import com.jack.service.AdminService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.jack.util.State;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -54,11 +52,11 @@ public class MyRealm extends AuthorizingRealm {
 		String username = (String) token.getPrincipal();
 
 		Admin admin = getUserByUsername(username);
-		if (admin == null) {
-			throw new AuthenticationException();
-		}
 
 		if (null != admin) {
+			if (admin.getState() == State.AdminState.FORBID) {
+				throw new LockedAccountException("用户已被禁用");
+			}
 			AuthenticationInfo info = new SimpleAuthenticationInfo(
 					admin.getUsername(), admin.getPassword(), "MyRealm");
 			return info;

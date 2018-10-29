@@ -1,6 +1,8 @@
 package com.jack.service;
 
 import com.jack.config.RootConfig;
+import com.jack.dto.ResourceDTO;
+import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,14 @@ public class ResourceServiceTest {
         } else {
             logger.info("Test: result is empty");
         }
+    }
+
+    @Test
+    public void testFindResourcesForAdmin() {
+        Admin admin = new Admin();
+        admin.setUsername("admin");
+        List<ResourceDTO> resourceDTOList = rscService.findResourcesForAdmin(admin);
+        logger.info("Test: find resources for admin");
     }
 
 }

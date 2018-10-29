@@ -24,12 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import static javax.swing.UIManager.get;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/15.
@@ -54,9 +50,15 @@ public class AdminController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public TmResponse login(Admin admin) {
+        // 参数校验
+        Preconditions.checkArgument(admin != null, "admin can not be null, admin=" + admin);
+        String username = StringUtils.trim(admin.getUsername());
+        String password = StringUtils.trim(admin.getPassword());
+        Preconditions.checkArgument(StringUtils.isNotBlank(username), "username can not be empty, username=" + username);
+        Preconditions.checkArgument(StringUtils.isNotBlank(password), "password can not be empty, password=" + password);
+
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(
-                admin.getUsername(), admin.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         try {
             subject.login(token);
         } catch (UnknownAccountException uae) {
@@ -69,10 +71,12 @@ public class AdminController {
             return TmResponse.fail("未知错误");
         }
 
-        subject.getSession().setAttribute(
-                Constant.LOGINED_USER, adminService.findAdminByUsername(admin.getUsername())
-        );
-        return TmResponse.success("登录成功");
+
+        Admin loginedAdmin = adminService.findAdminByUsername(admin.getUsername());
+        // 将密码置为“”返回给前端
+        loginedAdmin.setPassword("");
+        subject.getSession().setAttribute(Constant.LOGINED_USER, loginedAdmin);
+        return TmResponse.success("登录成功", loginedAdmin);
     }
 
     /**
@@ -132,7 +136,7 @@ public class AdminController {
     @ResponseBody
     public TmResponse updateAdminInfo(Admin admin) {
         // 参数校验
-        if (admin.getAdminId() == null) return TmResponse.fail("请传入管理员ID");
+        Preconditions.checkArgument(admin.getAdminId() != null, "adminId can not be null, adminId=" + admin.getAdminId());
 
         if (adminService.updateAdmin(admin)) {
             return TmResponse.success("修改管理员信息成功");
@@ -149,11 +153,12 @@ public class AdminController {
     @RequestMapping(value = "/find/id/{adminId}", method = RequestMethod.GET)
     @ResponseBody
     public TmResponse findAdmin(@PathVariable Long adminId) {
-        if (adminId == null) return TmResponse.fail("请传入管理员ID");
+        Preconditions.checkArgument((adminId != null && adminId > 0), "adminId can not be null or negative，adminId=" + adminId);
 
         Admin admin = adminService.findAdminByAdminId(adminId);
         if (admin == null) return TmResponse.fail("查询不到此管理员");
 
+        admin.setPassword("");
         return TmResponse.success("查询用户信息", admin);
     }
 
@@ -214,6 +219,14 @@ public class AdminController {
         boolean result = adminService.assignRolesForAdmin(admin, roleIds);
 
         return result ? TmResponse.success("分配角色成功") : TmResponse.fail("分配角色失败");
+    }
+
+
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    @ResponseBody
+    public TmResponse handleParamException(IllegalArgumentException e) {
+        return TmResponse.fail("参数异常", e.getMessage());
     }
 
 /*------------------------------------------------内部私有函数-----------------------------------------------------------*/

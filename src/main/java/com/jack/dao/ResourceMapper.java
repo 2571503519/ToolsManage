@@ -21,4 +21,6 @@ public interface ResourceMapper {
 
     List<Resource> findResourcesConditionally(Resource resource);
 
+    List<Resource> findResourcesByResPid(Long resPid);
+
 }

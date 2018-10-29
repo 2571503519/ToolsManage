@@ -4,8 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.jack.dao.AdminMapper;
 import com.jack.dao.RoleMapper;
 import com.jack.exception.PageQueryException;
+import com.jack.pojo.entity.AdminRole;
 import com.jack.pojo.entity.Role;
 import com.jack.pojo.entity.RoleResource;
 import com.jack.service.RoleService;
@@ -25,6 +28,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleMapper roleMapper;
+
+    @Autowired
+    private AdminMapper adminMapper;
 
     @Override
     public List<Role> findRoleList() {
@@ -71,6 +77,22 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public boolean updateRole(Role role) {
         return roleMapper.updateRole(role);
+    }
+
+    @Override
+    public boolean assignAdminsForRole(Role role, List<Long> adminIds) {
+        // 构造AdminRole对象的集合
+        List<AdminRole> adminRoleList = Lists.newArrayList();
+        AdminRole adminRole = null;
+        for (Long adminId : adminIds) {
+            adminRole = new AdminRole();
+            adminRole.setAdminId(adminId);
+            adminRole.setRoleId(role.getRoleId());
+            adminRoleList.add(adminRole);
+        }
+
+        int rows = adminMapper.saveAdminRoles(adminRoleList);
+        return rows > 0 ? true : false;
     }
 
 

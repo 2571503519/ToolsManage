@@ -86,6 +86,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public boolean updateAdmin(Admin admin) {
+        admin.setUsername(null);
+        admin.setPassword(null);
         return adminMapper.updateAdmin(admin);
     }
 

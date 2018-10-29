@@ -8,6 +8,10 @@
     <mvc:annotation-driven conversion-service="conversionService">
     </mvc:annotation-driven>
 
+    <mvc:cors>
+        <mvc:mapping path="/**" />
+    </mvc:cors>
+
     <mvc:resources mapping="/static/**" location="/static/"/>
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

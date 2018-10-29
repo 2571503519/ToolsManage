@@ -2,6 +2,7 @@ package com.jack.service;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.jack.config.RootConfig;
 import com.jack.exception.PageQueryException;
 import com.jack.pojo.entity.Role;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * Created by Jackaroo Zhang on 2018/10/25.
@@ -71,6 +74,16 @@ public class RoleServiceTest {
         role.setRoleName("VIP用户");
         boolean res = service.updateRole(role);
         logger.info("Test: update a role, Result: " + res);
+    }
+
+    @Test
+    public void testAssignAdminsForRole() {
+        Role role = new Role();
+        role.setRoleId(1L);
+        List<Long> adminIds = Lists.asList(9L, new Long[] {10L, 11L});
+
+        boolean res = service.assignAdminsForRole(role, adminIds);
+        logger.info("Test: assign admins for role, Result: " + res);
     }
 
 }
