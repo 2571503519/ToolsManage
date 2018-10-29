@@ -52,4 +52,34 @@
         from tm_dept
         where dept_id = #{deptId}
     </select>
+    <select id="findDepartmentByName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_dept
+        where dept_name = #{deptName}
+    </select>
+    <select id="findDepartmentByPid" parameterType="long" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_dept
+        where dept_pid = #{deptPid}
+    </select>
+    <select id="findCountByDepartmentPid" parameterType="long" resultType="int">
+        select count(dept_pid)
+        from tm_dept
+        where dept_pid = #{deptPid}
+    </select>
+    <select id="findDepartmentByCondition" parameterType="department" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_dept
+        <where>
+            <if test="deptName != null">
+                    dept_name like #{deptName}
+            </if>
+            <if test="deptManager != null">
+                    AND dept_manager like #{deptManager}
+            </if>
+        </where>
+    </select>
 </mapper>
