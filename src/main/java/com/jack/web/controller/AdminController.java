@@ -117,8 +117,7 @@ public class AdminController {
         if (StringUtils.isNotBlank(errorMsg))
             return TmResponse.fail(errorMsg);
 
-        Admin existedAdmin = adminService.findAdminByUsername(admin.getUsername());
-        if (existedAdmin != null) return TmResponse.fail("用户名已存在");
+
 
         if (adminService.addAdmin(admin)) {
             return TmResponse.success("添加用户成功");
