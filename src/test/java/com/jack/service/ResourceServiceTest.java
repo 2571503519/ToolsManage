@@ -1,9 +1,11 @@
 package com.jack.service;
 
+import com.github.pagehelper.PageInfo;
 import com.jack.config.RootConfig;
 import com.jack.dto.ResourceDTO;
 import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
+import com.jack.util.PageQuery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,7 +32,8 @@ public class ResourceServiceTest {
     public void testFindResourceList() {
         Resource resource = new Resource();
         resource.setResPermission("respotery:list");
-        List<Resource> resources = rscService.findResourceList(resource);
+        PageInfo<Resource> pageInfo = rscService.findResourceList(PageQuery.build(1, 3), resource);
+        List<Resource> resources = pageInfo.getList();
         if (resources != null && resources.size() > 0) {
             resources.stream().forEach(item -> {
                 logger.info("Test: resource = " + item);
@@ -42,9 +45,7 @@ public class ResourceServiceTest {
 
     @Test
     public void testFindResourcesForAdmin() {
-        Admin admin = new Admin();
-        admin.setUsername("admin");
-        List<ResourceDTO> resourceDTOList = rscService.findResourcesForAdmin(admin);
+        List<ResourceDTO> resourceDTOList = rscService.findResources();
         logger.info("Test: find resources for admin");
     }
 

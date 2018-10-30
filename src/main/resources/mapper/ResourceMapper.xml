@@ -38,7 +38,7 @@
                 or res_url = #{resUrl}
             </if>
             <if test="resPid != null">
-                and res_pid = #{resPid}
+                or res_pid = #{resPid}
             </if>
         </where>
     </select>

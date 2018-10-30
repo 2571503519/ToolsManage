@@ -1,5 +1,7 @@
 package com.jack.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.jack.dao.AdminMapper;
 import com.jack.dao.ResourceMapper;
@@ -8,7 +10,9 @@ import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 import com.jack.service.ResourceService;
 import com.jack.util.Constant;
+import com.jack.util.PageQuery;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,50 +28,61 @@ public class ResourceServiceImpl implements ResourceService {
     @Autowired
     private ResourceMapper rscMapper;
 
-    @Autowired
-    private AdminMapper adminMapper;
-
     @Override
-    public List<Resource> findResourceList(Resource resource) {
+    public PageInfo<Resource> findResourceList(PageQuery pageQuery, Resource resource) {
+        PageHelper.startPage(pageQuery.getPage(), pageQuery.getPageSize());
         List<Resource> resourceList = rscMapper.findResourcesConditionally(resource);
 
-        return (resourceList == null || resourceList.size() < 1)
-                ? Collections.EMPTY_LIST : resourceList;
+        resourceList = (resourceList == null || resourceList.size() < 1) ? Collections.EMPTY_LIST : resourceList;
+        PageInfo<Resource> pageInfo = new PageInfo<>(resourceList);
+        return pageInfo;
     }
 
     @Override
-    public List<ResourceDTO> findResourcesForAdmin(Admin admin) {
+    public List<ResourceDTO> findResources() {
         List<ResourceDTO> resourceDTOList = Lists.newArrayList();
 
-        assemble(0L, resourceDTOList);
+        assembleByResPid(0L, resourceDTOList);
         return resourceDTOList;
     }
 
 
     /*----------------------------------------私有方法------------------------------------------------------------------*/
 
-    private void assemble(Long resPid, List<ResourceDTO> resourceDTOList) {
+    /**
+     * 获取指定resPid下的所有资源（直接和间接）
+     * @param resPid
+     * @param resourceDTOList
+     */
+    private void assembleByResPid(Long resPid, List<ResourceDTO> resourceDTOList) {
         List<Resource> resources = rscMapper.findResourcesByResPid(resPid);
         for (Resource resource : resources) {
             resourceDTOList.add(transferToResourceDTO(resource));
         }
         for (ResourceDTO resourceDTO : resourceDTOList) {
-            assemble(resourceDTO.getResId(), resourceDTO.getChildren());
+            assembleByResPid(resourceDTO.getResId(), resourceDTO.getChildren());
         }
     }
 
+    /**
+     * 将Resource转化为ResourceDTO
+     * @param resource
+     * @return
+     */
     private ResourceDTO transferToResourceDTO(Resource resource) {
         ResourceDTO resourceDTO = new ResourceDTO();
-        resourceDTO.setResId(resource.getResId());
-        resourceDTO.setResName(resource.getResName());
-        resourceDTO.setResPermission(resource.getResPermission());
-        resourceDTO.setGmtCreate(resource.getGmtCreate());
-        resourceDTO.setGmtModified(resource.getGmtModified());
+        BeanUtils.copyProperties(resource, resourceDTO);
         resourceDTO.setChildren(Lists.newArrayList());
+//        ResourceDTO resourceDTO = new ResourceDTO();
+//        resourceDTO.setResId(resource.getResId());
+//        resourceDTO.setResName(resource.getResName());
+//        resourceDTO.setResUrl(resource.getResUrl());
+//        resourceDTO.setResPermission(resource.getResPermission());
+//        resourceDTO.setGmtCreate(resource.getGmtCreate());
+//        resourceDTO.setGmtModified(resource.getGmtModified());
 
         return resourceDTO;
     }
-
 
 
 }

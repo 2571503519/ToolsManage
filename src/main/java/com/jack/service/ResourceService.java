@@ -1,8 +1,10 @@
 package com.jack.service;
 
+import com.github.pagehelper.PageInfo;
 import com.jack.dto.ResourceDTO;
 import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
+import com.jack.util.PageQuery;
 
 import java.util.List;
 
@@ -11,8 +13,8 @@ import java.util.List;
  */
 public interface ResourceService {
 
-    List<Resource> findResourceList(Resource resource);
+    PageInfo<Resource> findResourceList(PageQuery pageQuery, Resource resource);
 
-    List<ResourceDTO> findResourcesForAdmin(Admin admin);
+    List<ResourceDTO> findResources();
 
 }
