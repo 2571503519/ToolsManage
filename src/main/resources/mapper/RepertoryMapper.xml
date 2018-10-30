@@ -4,6 +4,7 @@
 <mapper namespace="com.jack.dao.RepertoryMapper">
     <resultMap id="BaseResultMap" type="repertory">
         <id column="rep_id" property="repId" javaType="java.lang.Long" jdbcType="INTEGER"/>
+        <result column="rep_name" property="repName" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="rep_manager" property="repManager" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="dept_id" property="deptId" javaType="java.lang.Long" jdbcType="INTEGER"/>
@@ -12,20 +13,23 @@
     </resultMap>
 
     <sql id="AllColumn" >
-      rep_id, rep_manager, phone, dept_id, rep_location, state
+      rep_id, rep_name ,rep_manager, phone, dept_id, rep_location, state
     </sql>
 
     <insert id="saveRepertory" parameterType="repertory" useGeneratedKeys="true" keyProperty="repId">
         <selectKey order="AFTER" keyProperty="repId" resultType="long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        insert into tm_repertory(rep_id, rep_manager, phone, dept_id, rep_location, state)
-        values (null, #{repManager}, #{phone}, #{deptId}, #{repLocation}, #{state, typeHandler=com.jack.typehandler.CommonStateTypeHandler})
+        insert into tm_repertory(rep_id,rep_name ,rep_manager, phone, dept_id, rep_location, state)
+        values (null,#{repName} ,#{repManager}, #{phone}, #{deptId}, #{repLocation}, #{state, typeHandler=com.jack.typehandler.CommonStateTypeHandler})
     </insert>
 
     <update id="updateRepertory" parameterType="repertory">
         update tm_repertory
         <set>
+            <if test="repName != null">
+                rep_name = #{repName},
+            </if>
             <if test="repManager != null">
                 rep_manager = #{repManager},
             </if>
@@ -44,16 +48,41 @@
         </set>
         where rep_id = #{repId}
     </update>
-
-    <delete id="deleteRepertory" parameterType="long">
-        delete from tm_repertory
-        where rep_id = #{repId}
-    </delete>
-
     <select id="findRepertoryByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
         select
         <include refid="AllColumn"/>
         from tm_repertory
         where rep_id = #{repId}
+    </select>
+    <select id="findRepertoryByName" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_repertory
+        where rep_name = #{repName}
+    </select>
+    <update id="updateStateByPrimaryKey" parameterType="map">
+        update tm_repertory
+        set
+        state = #{state, typeHandler=com.jack.typehandler.CommonStateTypeHandler}
+        where rep_id = #{repId}
+    </update>
+    <select id="findAllByState" parameterType="int" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_repertory
+        where state = #{stateCode}
+    </select>
+    <select id="findByCondition" parameterType="repertory" resultMap="BaseResultMap">
+        select
+        <include refid="AllColumn"/>
+        from tm_repertory
+        <where>
+            <if test="state != null">
+                state = #{state, typeHandler=com.jack.typehandler.CommonStateTypeHandler}
+            </if>
+            <if test="repName != null">
+                AND rep_name like #{repName}
+            </if>
+        </where>
     </select>
 </mapper>

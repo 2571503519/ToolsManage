@@ -99,12 +99,12 @@ public class DepartmentController {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @ResponseBody
     public TmResponse updateDepartment(Department department){
-        if(department.getDeptId() == null){
-            return TmResponse.fail("请传入指定参数");
-        }
         String msg = validate(department);
         if(msg != null){
             return TmResponse.fail(msg);
+        }
+        if(department.getDeptId() == null){
+            return TmResponse.fail("请传入指定参数");
         }
         try{
             boolean res = departmentService.updateDepartment(department);

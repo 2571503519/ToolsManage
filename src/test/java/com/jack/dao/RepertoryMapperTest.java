@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:spring-dao.xml"})
 public class RepertoryMapperTest {
@@ -22,9 +24,10 @@ public class RepertoryMapperTest {
     @Test
     public void testSaveRepertory(){
         Repertory repertory = new Repertory();
+        repertory.setRepName("test1");
         repertory.setRepManager("zhangsan");
         repertory.setPhone("123456789");
-        repertory.setDeptId(1L);
+        repertory.setDeptId(2L);
         repertory.setRepLocation("nanchang");
         repertory.setState(State.CommonState.NORMAL);
         boolean res = repertoryMapper.saveRepertory(repertory);
@@ -32,12 +35,17 @@ public class RepertoryMapperTest {
     }
     @Test
     public void testFindRepertoryByPrimaryKey(){
-        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(2L);
+        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(3L);
+        logger.info("Test : Query a Repertory，Result{}",repertory);
+    }
+    @Test
+    public void testFindRepertoryByName(){
+        Repertory repertory = repertoryMapper.findRepertoryByName("test");
         logger.info("Test : Query a Repertory，Result{}",repertory);
     }
     @Test
     public void testUpdateRepertory(){
-        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(2L);
+        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(3L);
         if(repertory == null){
             logger.info("Test : Query Result is null");
             return;
@@ -48,13 +56,18 @@ public class RepertoryMapperTest {
         logger.info("Test : Update a Repertory，Result {}",res);
     }
     @Test
-    public void testDeleteRepertory(){
-        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(2L);
+    public void testUpdateStateByPrimaryKey(){
+        Repertory repertory = repertoryMapper.findRepertoryByPrimaryKey(3L);
         if(repertory == null){
             logger.info("Test : Query Result is null");
-            return;
+            return ;
         }
-        boolean res = repertoryMapper.deleteRepertory(repertory.getRepId());
-        logger.info("Test ：Delete a Repertory，Result {}",res);
+        boolean res = repertoryMapper.updateStateByPrimaryKey(repertory.getRepId(), State.CommonState.DELETE);
+        logger.info("Test Delete a Repertory Result {}",res);
+    }
+    @Test
+    public void testFindAllByState(){
+        List<Repertory> repertoryList = repertoryMapper.findAllByState(2);
+        logger.info("Test Query Repertory Result {} ：{}", repertoryList.size() , repertoryList);
     }
 }
