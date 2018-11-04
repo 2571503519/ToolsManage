@@ -69,5 +69,4 @@ public class DepartmentServiceTest {
         List<DepartmentDTO> departmentDTOList = departmentService.findDepartmentForSelect();
         logger.info("Test : Query Department Result {}",departmentDTOList);
     }
-
 }

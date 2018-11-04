@@ -1,12 +1,13 @@
-package com.jack.pojo.entity;
+package com.jack.dto;
 
+import com.jack.pojo.entity.Department;
 import com.jack.util.State;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-public class Repertory {
+public class RepertoryDTO {
 
     @Getter @Setter private Long repId;
 
@@ -16,9 +17,9 @@ public class Repertory {
 
     @Getter @Setter private String phone;   //库房联系电话
 
-    @Getter @Setter private Long deptId;   //库房所属部门
-
     @Getter @Setter private String repLocation;  //库房地址
 
-    @Getter @Setter private State.CommonState state;
+    @Getter @Setter private State.CommonState state;  //状态
+
+    @Getter @Setter private Department department; //所属部门
 }
