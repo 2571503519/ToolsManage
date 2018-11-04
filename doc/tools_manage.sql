@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-10-27 13:15:03
+Date: 2018-11-04 13:27:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,20 +32,14 @@ CREATE TABLE `tm_admin` (
   `gmt_modified` datetime NOT NULL COMMENT '记录更改时间',
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `uk_username` (`username`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_admin
 -- ----------------------------
-INSERT INTO `tm_admin` VALUES ('2', '2570150.7496842077323721', '2570150.7225363589353039', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-13 20:24:52', '2018-10-13 20:24:52');
-INSERT INTO `tm_admin` VALUES ('4', '2570150.7814951591305326', '2570150.9300681180400625', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-13 20:25:58', '2018-10-13 20:25:58');
-INSERT INTO `tm_admin` VALUES ('5', '2570150.01980616904320598', '2570150.5047681413731622', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-17 20:23:48', '2018-10-17 20:23:48');
-INSERT INTO `tm_admin` VALUES ('6', '2570150.6050227960715377', '2570150.404798235553643', '152654646445646546546', 'jackaroo', '3', '1,2,3,4', '2', '2018-10-19 18:53:53', '2018-10-19 18:53:53');
-INSERT INTO `tm_admin` VALUES ('7', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'fsdf', 'sdfsd', '3', '1,2,3', '1', '2018-10-20 17:52:14', '2018-10-24 12:27:47');
-INSERT INTO `tm_admin` VALUES ('8', 'zhangjiale', '123', '1234', 'Jack', '1', '1', '2', '2018-10-21 14:27:24', '2018-10-21 14:27:24');
-INSERT INTO `tm_admin` VALUES ('9', 'zhangjiale1', '11', 'fsdf', '', '1', '', '2', '2018-10-21 14:29:50', '2018-10-21 14:29:50');
-INSERT INTO `tm_admin` VALUES ('10', 'zhangjiale12', '11', 'fsdf', 'sdfsd', '1', null, '2', '2018-10-21 14:33:20', '2018-10-21 14:33:20');
+INSERT INTO `tm_admin` VALUES ('7', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'fsdf', 'sdfsd', '3', '1,2,3', '2', '2018-10-20 17:52:14', '2018-10-24 12:27:47');
 INSERT INTO `tm_admin` VALUES ('11', 'zhangjiale123', '6512bd43d9caa6e02c990b0a82652dca', 'fsdf', 'zhang', '3', null, '2', '2018-10-23 22:47:10', '2018-10-23 22:51:36');
+INSERT INTO `tm_admin` VALUES ('12', 'zhang', 'd0cd2693b3506677e4c55e91d6365bff', '456454132123', 'Jack', '5', null, '0', '2018-10-29 15:49:46', '2018-10-29 20:21:23');
 
 -- ----------------------------
 -- Table structure for `tm_admin_repertory`
@@ -70,15 +64,27 @@ CREATE TABLE `tm_admin_role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) unsigned DEFAULT NULL,
   `role_id` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_adminId_roleId` (`admin_id`,`role_id`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_admin_role
 -- ----------------------------
+INSERT INTO `tm_admin_role` VALUES ('14', '6', '1');
+INSERT INTO `tm_admin_role` VALUES ('15', '6', '2');
+INSERT INTO `tm_admin_role` VALUES ('16', '6', '3');
 INSERT INTO `tm_admin_role` VALUES ('1', '7', '1');
 INSERT INTO `tm_admin_role` VALUES ('2', '7', '2');
 INSERT INTO `tm_admin_role` VALUES ('3', '7', '3');
+INSERT INTO `tm_admin_role` VALUES ('17', '9', '1');
+INSERT INTO `tm_admin_role` VALUES ('18', '10', '1');
+INSERT INTO `tm_admin_role` VALUES ('19', '11', '1');
+INSERT INTO `tm_admin_role` VALUES ('23', '11', '8');
+INSERT INTO `tm_admin_role` VALUES ('20', '12', '1');
+INSERT INTO `tm_admin_role` VALUES ('21', '12', '2');
+INSERT INTO `tm_admin_role` VALUES ('22', '12', '3');
+INSERT INTO `tm_admin_role` VALUES ('24', '12', '8');
 
 -- ----------------------------
 -- Table structure for `tm_dept`
@@ -91,11 +97,12 @@ CREATE TABLE `tm_dept` (
   `dept_manager` varchar(30) DEFAULT NULL COMMENT '部门负责人',
   `dept_manager_phone` varchar(30) DEFAULT NULL COMMENT '部门负责人联系方式',
   PRIMARY KEY (`dept_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_dept
 -- ----------------------------
+INSERT INTO `tm_dept` VALUES ('3', '工程部', '0', '张家乐', '54151516515');
 
 -- ----------------------------
 -- Table structure for `tm_repertory`
@@ -103,13 +110,14 @@ CREATE TABLE `tm_dept` (
 DROP TABLE IF EXISTS `tm_repertory`;
 CREATE TABLE `tm_repertory` (
   `rep_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `rep_name` varchar(50) DEFAULT NULL COMMENT '库房名称',
   `rep_manager` varchar(60) DEFAULT NULL COMMENT '库房负责人',
   `phone` varchar(30) DEFAULT NULL COMMENT '库房联系电话',
   `dept_id` int(11) unsigned DEFAULT NULL COMMENT '库房所属部门',
   `rep_location` varchar(255) DEFAULT NULL COMMENT '库房地址',
   `state` tinyint(4) unsigned NOT NULL COMMENT '正常 2、禁用 1、删除 0',
   PRIMARY KEY (`rep_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_repertory
@@ -129,7 +137,7 @@ CREATE TABLE `tm_resource` (
   `gmt_modified` datetime NOT NULL,
   PRIMARY KEY (`res_id`),
   UNIQUE KEY `uk_res_url` (`res_url`) USING HASH
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_resource
@@ -137,6 +145,9 @@ CREATE TABLE `tm_resource` (
 INSERT INTO `tm_resource` VALUES ('1', '库房管理', 'respotery:list', '/api/v1/repertory', '0', '2018-10-12 21:15:51', '2018-10-12 21:15:51');
 INSERT INTO `tm_resource` VALUES ('2', '部门管理', 'dept:list', '/api/v1/dept', '0', '2018-10-21 09:49:53', '2018-10-21 09:49:56');
 INSERT INTO `tm_resource` VALUES ('5', '库房管理1', 'respotery:list', '/api/v2/repertory', '0', '2018-10-22 12:55:56', '2018-10-22 12:55:56');
+INSERT INTO `tm_resource` VALUES ('6', '是多少', 'fsss', '/asdas/asda', '1', '2018-10-28 11:27:18', '2018-10-28 11:27:21');
+INSERT INTO `tm_resource` VALUES ('7', '按时发', 'sada', '/asd/asd', '6', '2018-10-28 11:27:41', '2018-10-28 11:27:45');
+INSERT INTO `tm_resource` VALUES ('8', '发送方', 'sdf', '/fdgf/dfgdf', '2', '2018-10-28 11:28:04', '2018-10-28 11:28:08');
 
 -- ----------------------------
 -- Table structure for `tm_role`
@@ -150,7 +161,7 @@ CREATE TABLE `tm_role` (
   `gmt_modified` datetime NOT NULL,
   PRIMARY KEY (`role_id`),
   UNIQUE KEY `uk_role_code` (`role_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_role
@@ -158,7 +169,9 @@ CREATE TABLE `tm_role` (
 INSERT INTO `tm_role` VALUES ('1', '管理员', 'admin', '2018-10-21 09:26:15', '2018-10-21 09:26:17');
 INSERT INTO `tm_role` VALUES ('2', '用户', 'user', '2018-10-21 09:26:45', '2018-10-21 09:26:48');
 INSERT INTO `tm_role` VALUES ('3', '超级管理员', 'root', '2018-10-21 13:33:49', '2018-10-21 13:33:53');
-INSERT INTO `tm_role` VALUES ('5', '超级用户', 'super', '2018-10-26 11:55:17', '2018-10-26 11:55:17');
+INSERT INTO `tm_role` VALUES ('5', 'VIP用户', 'super', '2018-10-26 11:55:17', '2018-10-27 22:15:55');
+INSERT INTO `tm_role` VALUES ('6', '普通用户', 'commonUser', '2018-10-29 20:51:58', '2018-10-29 20:51:58');
+INSERT INTO `tm_role` VALUES ('8', '一号管理员', 'firstAdmin', '2018-10-29 21:00:21', '2018-10-29 21:09:52');
 
 -- ----------------------------
 -- Table structure for `tm_role_resource`
@@ -169,7 +182,7 @@ CREATE TABLE `tm_role_resource` (
   `role_id` int(11) unsigned DEFAULT NULL,
   `res_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_role_resource
@@ -177,6 +190,10 @@ CREATE TABLE `tm_role_resource` (
 INSERT INTO `tm_role_resource` VALUES ('1', '1', '1');
 INSERT INTO `tm_role_resource` VALUES ('2', '1', '2');
 INSERT INTO `tm_role_resource` VALUES ('3', '1', '5');
+INSERT INTO `tm_role_resource` VALUES ('4', '1', '6');
+INSERT INTO `tm_role_resource` VALUES ('5', '1', '7');
+INSERT INTO `tm_role_resource` VALUES ('6', '1', '8');
+INSERT INTO `tm_role_resource` VALUES ('7', '2', '1');
 
 -- ----------------------------
 -- Table structure for `tm_tool`
@@ -194,7 +211,7 @@ CREATE TABLE `tm_tool` (
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime NOT NULL,
   PRIMARY KEY (`tool_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_tool
@@ -214,7 +231,7 @@ CREATE TABLE `tm_tool_bag` (
   `gmt_create` datetime NOT NULL,
   `gmt_modified` datetime NOT NULL,
   PRIMARY KEY (`tb_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_tool_bag
@@ -229,7 +246,7 @@ CREATE TABLE `tm_tool_cate` (
   `cate_name` varchar(60) DEFAULT NULL,
   `cate_pid` int(11) unsigned DEFAULT NULL COMMENT '当前分类的父分类ID',
   PRIMARY KEY (`cate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tm_tool_cate

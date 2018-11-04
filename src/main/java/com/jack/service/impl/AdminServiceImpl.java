@@ -4,19 +4,20 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.jack.dao.AdminMapper;
-import com.jack.pojo.entity.Admin;
-import com.jack.pojo.entity.AdminRole;
-import com.jack.pojo.entity.Resource;
-import com.jack.pojo.entity.Role;
+import com.jack.dao.DepartmentMapper;
+import com.jack.pojo.entity.*;
+import com.jack.pojo.vo.AdminVO;
 import com.jack.service.AdminService;
 import com.jack.util.MD5Util;
 import com.jack.util.PageQuery;
 import com.jack.util.State;
 import com.jack.util.TmResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminMapper adminMapper;
+
+    @Autowired
+    private DepartmentMapper deptMapper;
 
     @Override
     public Admin findAdminByUsername(String username) {
@@ -59,14 +63,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public PageInfo<Admin> queryAdminList(PageQuery pageQuery, Admin admin) {
-        if (pageQuery == null) return null;
-        // PageHelper中分页从0和从1开始效果相同
         PageHelper.startPage(pageQuery.getPage(), pageQuery.getPageSize());
-        // 查询参数
-        String queryParam = pageQuery.getQueryParam();
-        // TODO: 设置查询条件
-        List<Admin> adminList = adminMapper.findAdminsConditionally(admin);
 
+        List<Admin> adminList = adminMapper.findAdminsConditionally(admin);
         return new PageInfo<>(adminList);
     }
 
@@ -108,5 +107,18 @@ public class AdminServiceImpl implements AdminService {
         int rows = adminMapper.saveAdminRoles(adminRoleList);
         return rows > 0 ? true : false;
     }
+
+    @Override
+    public List<Role> findRolesByAdminId(Long adminId) {
+        return adminMapper.findRolesByAdminId(adminId);
+    }
+
+
+
+
+    /*-----------------------------------------------私有方法-----------------------------------------------------------*/
+
+
+
 
 }

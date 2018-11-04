@@ -40,6 +40,13 @@
         where a.username = #{username}
     </select>
 
+    <select id="findRolesByAdminId" parameterType="long" resultType="role">
+        select r.role_id as roleId, r.role_name as roleName, r.role_code as roleCode, r.gmt_create as gmtCreate, r.gmt_modified as gmtModified
+        from tm_admin_role as ar
+        LEFT JOIN tm_role as r on ar.role_id = r.role_id
+        where ar.admin_id = #{adminId};
+    </select>
+
     <select id="findResourcesByUsername" parameterType="string" resultType="resource">
         select distinct
         res.res_id as resId, res.res_name as resName, res.res_url as resUrl

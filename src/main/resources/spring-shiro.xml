@@ -35,10 +35,11 @@
         <property name="filterChainDefinitions">
             <value>
                 <!-- 静态文件 -->
-                /static/** = anon
+                /** = anon
+                <!--/static/** = anon
                 /admin/login = anon
                 /admin/logut = authc
-                /admin/** = authc,roles[admin]
+                /admin/** = authc,roles[admin]-->
             </value>
         </property>
     </bean>

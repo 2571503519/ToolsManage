@@ -6,8 +6,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.jack.exception.NotFoundCodeException;
 import com.jack.pojo.entity.Admin;
+import com.jack.pojo.entity.Department;
 import com.jack.pojo.entity.Role;
+import com.jack.pojo.vo.AdminVO;
 import com.jack.service.AdminService;
+import com.jack.service.DepartmentService;
 import com.jack.service.RoleService;
 import com.jack.util.Constant;
 import com.jack.util.PageQuery;
@@ -20,10 +23,12 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +46,9 @@ public class AdminController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private DepartmentService deptService;
 
     /**
      * 用户登录
@@ -100,7 +108,16 @@ public class AdminController {
     public TmResponse adminList(PageQuery pageQuery, Admin admin) {
         if (admin.getState() == null) admin.setState(State.AdminState.NORMAL);
 
-        PageInfo<Admin> adminPageInfo = adminService.queryAdminList(pageQuery, admin);
+        PageInfo adminPageInfo = adminService.queryAdminList(pageQuery, admin);
+
+        List<Admin> adminList = adminPageInfo.getList();
+        List<AdminVO> adminVOList = Lists.newArrayListWithCapacity(adminList.size());
+
+        for (Admin item : adminList) {
+            adminVOList.add(transferToAdminVO(item));
+        }
+        adminPageInfo.setList(adminVOList);
+
         return TmResponse.success("获取管理员列表", adminPageInfo);
     }
 
@@ -245,6 +262,24 @@ public class AdminController {
             return "身份证号码不能为空";
         }
         return null;
+    }
+
+    private AdminVO transferToAdminVO(Admin admin) {
+        AdminVO adminVO = null;
+        adminVO = new AdminVO();
+        BeanUtils.copyProperties(admin, adminVO);
+        Department department = deptService.findDepartmentById(admin.getDeptId());
+        List<Role> roles = adminService.findRolesByAdminId(admin.getAdminId());
+        if (roles != null && roles.size() > 0) {
+            ArrayList<String> roleNameList = Lists.newArrayListWithCapacity(roles.size());
+            roles.stream().forEach(role -> {
+                roleNameList.add(role.getRoleName());
+            });
+            adminVO.setRoleList(roleNameList);
+        }
+        if (department != null)
+            adminVO.setDeptName(department.getDeptName());
+        return adminVO;
     }
 
 }

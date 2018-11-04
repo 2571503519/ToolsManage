@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.jack.pojo.entity.Admin;
 import com.jack.pojo.entity.Resource;
 import com.jack.pojo.entity.Role;
+import com.jack.pojo.vo.AdminVO;
 import com.jack.util.PageQuery;
 import com.jack.util.State;
 import com.jack.util.TmResponse;
@@ -67,5 +68,7 @@ public interface AdminService {
 
 
     boolean assignRolesForAdmin(Admin admin, List<Long> roleIds);
+
+    List<Role> findRolesByAdminId(Long adminId);
 
 }

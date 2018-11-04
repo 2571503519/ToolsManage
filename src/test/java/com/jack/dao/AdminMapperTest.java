@@ -117,4 +117,18 @@ public class AdminMapperTest {
         logger.info("Test: save adminRole list, Result: effect {} rows", rows);
     }
 
+    @Test
+    public void testFindRolesByAdminId() {
+        List<Role> roles = mapper.findRolesByAdminId(7L);
+        if (roles == null && roles.size() < 1) {
+            logger.info("result is null, roles = " + roles);
+            return;
+        }
+
+        roles.stream().forEach(role -> {
+            logger.info("Test: role = " + role);
+        });
+
+    }
+
 }

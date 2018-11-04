@@ -28,6 +28,8 @@ public interface AdminMapper {
 
      List<Role> findRolesByUsername(String username);
 
+     List<Role> findRolesByAdminId(Long adminId);
+
      List<Resource> findResourcesByUsername(String username);
 
      List<Admin> findAdminsConditionally(Admin state);
